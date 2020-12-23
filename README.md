@@ -39,11 +39,14 @@ Automated Detection of Tumor Regions from H&amp;E-stained Whole Slide Images Usi
 
 ![](images/method-overview.svg)
 
-## Whole Slide Images
+
+## Whole slide images
 ![](images/wsi.svg)
+
 
 ## Proposed method
 ![](images/proposed-network-architecture.svg)
+
 
 # Datasets
 
@@ -53,7 +56,15 @@ Automated Detection of Tumor Regions from H&amp;E-stained Whole Slide Images Usi
 
 ## ORCA
 
-# Usage
+
+# Sourcecode
+
+## Training
+
+## Running
+
+## Testing
+
 
 # Contact
 
