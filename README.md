@@ -17,14 +17,7 @@ Automated Detection of Tumor Regions from H&amp;E-stained Whole Slide Images Usi
             -->
         </ul>
     </li>
-    <li>
-        <a href="#sourcecode">Sourcecode</a>
-        <ul>
-            <li><a href="#training">Training</a></li>
-            <li><a href="#running">Running</a></li>
-            <li><a href="#testing">Testing</a></li>
-        </ul>
-    </li>
+    <li><a href="#sourcecode">Sourcecode</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
@@ -62,25 +55,25 @@ Our oral cavity-derived cancer whole slide images dataset (OCDC) was built using
 
 A total of 15 whole slide images were digitized using the Slide Scanner Aperio AT2 (Leica Biosystems Imaging, Inc., Nussloch, Germany) coupled to a computer (Dell Precision T3600) at 20× magnification and pixel-level resolution of 0.5025 μm × 0.5025 μm. The digitized images have different sizes – the larger one has almost three billions of pixels (63,743×45,472 pixels) – and were stored in SVS format using the RGB (red, green, blue) color model. A total of 1,050 image-patches of size 640×640 pixels were randomly extracted from these 15 WSI and the content of each image-patch was hand-annotated by a well-trained pathologist. The image-patch dataset was split into two subsets: the training set with 840 image-patches and the test set with 210 image-patches.
 
-[+](datasets/OCDC)
+Details about the ODCD dataset are available at [datasets/OCDC folder](datasets/OCDC).
 
 ## CAMELYON16
 The [CAMELYON16 dataset](https://camelyon16.grand-challenge.org) is a publicly available dataset with a combination of 399 WSIs of sentinel lymph node with breast cancer metastases tissue sections collected from two medical centers in the Netherlands for the [CAMELYON16 challenge](https://doi.org/10.1001/jama.2017.14585). These 399 WSIs were split into 270 for training and 129 for testing. The ground truth data for training and testing were provided as XML files containing the vertices of the delineation of tumor regions at WSI level. 
 
-[+](datasets/CAMELYON16)
+Details about the CAMELYON16 dataset are available at [datasets/CAMELYON16 folder](datasets/CAMELYON16).
 
 
 <!--
 ## ORCA
 -->
 
-# Sourcecode
+# Source code
 
-## Training
+The proposed method and the experimental evaluation were implemented using the [PyTorch framework](https://pytorch.org/get-started/locally/). The FCN model was trained using a desktop computer (Intel Core i7 3.4GHz×8 processor, 32 GB memory, 1TB SSD) equipped with GeForce GTX 1050 Ti graphic card and Ubuntu 20.04 operational system. For OCDC dataset the elapsed time to train the model during 500 epochs was about five days using 840 images of size 640×640 pixels. The elapsed time to train the CAMELYON16 dataset during 10 epochs using 109,278 images was about 15 days. After training, the elapsed time to process an 640×640 pixels input image-patch was about 0.8 seconds.
 
-## Running
+To provide better understanding and make this work as reproducible as possible, the source code is publicly available at [source code folder](sourcecode).
 
-## Testing
+
 
 
 # Contact
