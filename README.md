@@ -42,7 +42,7 @@ The proposed method for localization and segmentation of OSCC tumor region-deriv
  
 ![](images/method-overview.svg)
 
-We propose to use a fully conolutional neural network (FCN) to address the challenge of patch-based segmentation of tumor regions in oral cavity-derived H&E-stained WSI at pixel level. The proposed FCN architecture, which consists of a couple of encoding (down) and decoding (up) layers, is based on [U-Net model](http://lmb.informatik.uni-freiburg.de/Publications/2015/RFB15a%22) and is illustrated below. 
+We propose to use a fully convolutional neural network (FCN) to address the challenge of patch-based segmentation of tumor regions in oral cavity-derived H&E-stained WSI at pixel level. The proposed FCN architecture, which consists of a couple of encoding (down) and decoding (up) layers, is based on [U-Net model](http://lmb.informatik.uni-freiburg.de/Publications/2015/RFB15a) and is illustrated below. 
 
 ![](images/proposed-network-architecture.svg)
 
