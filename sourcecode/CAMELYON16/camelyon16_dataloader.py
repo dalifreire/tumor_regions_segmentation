@@ -53,11 +53,11 @@ class Camelyon16Dataset(Dataset):
         return [x, y if mask is not None else path_mask, fname, original_size]
 
     def transform(self, image, mask, fname):
-        #should_augment = (self.augmentation and fname in self.used_images)
-        #self.used_images.add(fname)
-        #x, y = data_augmentation(image, mask, self.img_input_size, self.img_output_size, should_augment)
+        should_augment = (self.augmentation and fname in self.used_images)
+        self.used_images.add(fname)
 
-        x, y = data_augmentation(image, mask, self.img_input_size, self.img_output_size, self.augmentation)
+        x, y = data_augmentation(image, mask, self.img_input_size, self.img_output_size, should_augment)
+        #x, y = data_augmentation(image, mask, self.img_input_size, self.img_output_size, self.augmentation)
         return x, y, fname, image.size
 
 
@@ -66,13 +66,6 @@ def is_valid_file(filename, extensions=('.jpg', '.bmp', '.tif', '.png')):
 
 
 def load_dataset(img_dir, img_input_size, dataset_type):
-
-    first_train = ""
-    with open("application.log", 'r') as file:
-        first_train = file.read()
-
-    #result_dir = "/media/dalifreire/HD1/DALI/HumanOralDataset+CAMELYON16/results/Epoch-10_Images-109278_Batch-1/LAB_640x640/01-output"
-    #result_imgs = os.listdir(result_dir)
 
     images = []
     classes = ["normal", "tumor", "test"]
@@ -83,7 +76,7 @@ def load_dataset(img_dir, img_input_size, dataset_type):
 
         for cls in sorted([cls for cls in d if cls in classes]):
 
-            class_root_dir = "{}/{}/tiles/{}x{}".format(dataset_root_dir, cls, img_input_size[0], img_input_size[1])
+            class_root_dir = "{}/{}/patch/{}x{}".format(dataset_root_dir, cls, img_input_size[0], img_input_size[1])
             for _, img_dir, _ in sorted(os.walk(class_root_dir)):
 
                 for img_number in sorted(img_n for img_n in img_dir if img_n.startswith(tuple(classes))):
@@ -99,12 +92,10 @@ def load_dataset(img_dir, img_input_size, dataset_type):
                             path_img = os.path.join(original_dir, fname)
                             path_mask = os.path.join(mask_dir, fname)
 
-                            #if is_valid_file(path_img) and fname not in result_imgs:
-                            #if is_valid_file(path_img) and first_train.find(fname) < 0:
                             if is_valid_file(path_img):
                                 item = (path_img, path_mask, fname)
                                 images.append(item)
-    first_train = ""
+
     return images
 
 
