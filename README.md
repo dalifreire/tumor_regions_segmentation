@@ -25,7 +25,7 @@ Automated Detection of Tumor Regions from H&amp;E-stained Whole Slide Images Usi
 
 # Whole slide images
 
-Whole slide Images (WSI) are multi-gigapixel images created from tissue sections that can contain many different types of cells and regions – such as keratin, lymphocytes, blood vessels, glands, muscle and tumor cells. WSIs may also contain some derived artefacts from the image acquisition process, like tissue folding and blurring, that need to be ignored. 
+Whole slide Images (WSI) are multi-gigapixel images created from tissue sections that can contain many different types of cells and regions – such as keratin, lymphocytes, blood vessels, glands, muscle and tumor cells. WSIs may also contain some derived artifacts from the image acquisition process, like tissue folding and blurring, that need to be ignored. 
 
 A single H&E-stained histological WSI, as shown below, may contain thousands of nuclei and other cell structures that should be analyzed by pathologists at diagnostic time. This large amount of information requires very skilled professionals and a great effort to label the relevant structures to create these image datasets.
 
