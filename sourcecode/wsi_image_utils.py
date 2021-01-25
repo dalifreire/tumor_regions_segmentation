@@ -1,3 +1,5 @@
+import math
+
 import cv2
 import openslide
 import numpy as np
@@ -94,22 +96,25 @@ def open_wsi(filename):
     return slide
 
 
-def scale_down_wsi(wsi_image, magnification):
+def scale_down_wsi(wsi_image, magnification, use_openslide_propeties=True):
     """
     Convert a WSI to a scaled-down PIL image.
     Args:
         wsi_image: Whole-slide image to be scaled down.
         magnification: Whole-slide image magnification to be used.
+        use_openslide_propeties:
     Returns:
         Returns the scaled-down PIL image.
     """
     scale = get_scale_by_magnification(magnification)
-    #large_w, large_h = wsi_image.dimensions
-    #new_w = math.floor(large_w / scale)
-    #new_h = math.floor(large_h / scale)
-
-    level = wsi_image.level_downsamples.index(scale)
-    new_dimension = wsi_image.level_dimensions[level]
+    if use_openslide_propeties:
+        level = wsi_image.level_downsamples.index(scale)
+        new_dimension = wsi_image.level_dimensions[level]
+    else:
+        large_w, large_h = wsi_image.dimensions
+        new_w = math.floor(large_w / scale)
+        new_h = math.floor(large_h / scale)
+        new_dimension = (new_w, new_h) if new_w > 100 else (new_w*2, new_h*2)
 
     return wsi_image.get_thumbnail(new_dimension)
 
@@ -590,3 +595,37 @@ def output_map_to_rgb_image(output_map):
         rgb = np.stack([r, g, b], axis=2)
 
     return rgb
+
+
+def show_np_img(np_img, text=None):
+    """
+    Convert a NumPy array to a PIL image, add text to the image, and display the image.
+    Args:
+        np_img: Image as a NumPy array.
+        text: The text to be added to the image.
+    """
+
+    pil_img = np_to_pil(np_img)
+    show_pil_img(pil_img, text)
+
+
+def show_pil_img(pil_img, text=None):
+    """
+    Add text to the image, and display the image.
+    Args:
+        pil_img: PIL Image.
+        text: The text to be added to the image.
+    """
+
+    # if gray, convert to RGB for display
+    if pil_img.mode == 'L':
+        pil_img = pil_img.convert('RGB')
+
+    if text is not None:
+        draw = ImageDraw.Draw(pil_img)
+        font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeMono.ttf", 48)
+        (x, y) = draw.textsize(text, font)
+        draw.rectangle([(0, 0), (x + 5, y + 4)], fill=(0, 0, 0), outline=(0, 0, 0))
+        draw.text((2, 0), text, (255, 0, 0), font=font)
+
+    pil_img.show()
