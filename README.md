@@ -12,9 +12,7 @@ Automated Detection of Tumor Regions from H&amp;E-stained Whole Slide Images Usi
         <ul>
             <li><a href="#ocdc">OCDC</a></li>
             <li><a href="#camelyon16">CAMELYON16</a></li>
-            <!--
             <li><a href="#orca">ORCA</a></li>
-            -->
         </ul>
     </li>
     <li><a href="#sourcecode">Sourcecode</a></li>
@@ -34,7 +32,7 @@ A single H&E-stained histological WSI, as shown below, may contain thousands of 
 
 # Proposed method
 
-The proposed method for localization and segmentation of OSCC tumor region-derived H&E-stained WSI is established on four pivotal steps: 
+The proposed method for localization and segmentation of oral squamous cell carcinoma (OSCC) tumor region-derived H&E-stained WSI is established on four pivotal steps: 
 1. Scales down the WSI at a factor of 32× to perform background removal and tissue detection; 
 2. Image-patch extraction from the identified tissue regions; 
 3. Pixel-level cancer probability computation for each image-patch using FCN; 
@@ -63,9 +61,11 @@ The [CAMELYON16 dataset](https://camelyon16.grand-challenge.org) is a publicly a
 Details about the CAMELYON16 dataset are available at [datasets/CAMELYON16 folder](datasets/CAMELYON16).
 
 
-<!--
 ## ORCA
--->
+The [ORal Cancer Annotated dataset (ORCA)](https://sites.google.com/unibas.it/orca) is a collection of 200 OSCC annotated images derived from the [Cancer Genome Atlas (TCGA) dataset](https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga). 
+
+Details about the ORCA dataset are available at [datasets/ORCA folder](datasets/ORCA).
+
 
 # Source code
 
