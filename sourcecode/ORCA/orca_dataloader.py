@@ -35,15 +35,20 @@ class ORCADataset(Dataset):
         return [x, y if mask is not None else path_mask, fname, original_size]
 
     def transform(self, image, mask, fname):
-        should_augment = (self.augmentation and fname in self.used_images)
-        self.used_images.add(fname)
+        #should_augment = False
+        #should_augment = (self.augmentation and fname in self.used_images)
+        #self.used_images.add(fname)
 
-        x, y = data_augmentation(image, mask, self.img_input_size, self.img_output_size, should_augment)
-        #x, y = data_augmentation(image, mask, self.img_input_size, self.img_output_size, self.augmentation)
+        #x, y = data_augmentation(image, mask, self.img_input_size, self.img_output_size, should_augment)
+        x, y = data_augmentation(image, mask, self.img_input_size, self.img_output_size, self.augmentation)
         return x, y, fname, image.size
 
 
 def load_dataset(img_dir, img_input_size, dataset_type):
+
+    first_train = ""
+    with open("application.log", 'r') as file:
+        first_train = file.read()
 
     images = []
     classes = ["tumor"]
@@ -68,10 +73,11 @@ def load_dataset(img_dir, img_input_size, dataset_type):
                             path_img = os.path.join(original_dir, fname)
                             path_mask = os.path.join(mask_dir, fname)
 
+                            #if is_valid_file(path_img) and first_train.find(fname) < 0:
                             if is_valid_file(path_img):
                                 item = (path_img, path_mask, fname)
                                 images.append(item)
-
+    first_train = ""
     return images
 
 
