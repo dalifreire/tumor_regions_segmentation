@@ -1,9 +1,14 @@
 import datetime
 import os
+import sys
 import time
 
 import torch.optim as optim
 from torch.autograd import Variable
+
+current_path = os.path.abspath('.')
+root_path = os.path.dirname(os.path.dirname(current_path))
+sys.path.append(root_path)
 
 from sourcecode.ORCA.orca_dataloader import *
 from sourcecode.unet_model import *
@@ -19,7 +24,7 @@ def train_model(dataloaders,
 
     # Checking for GPU availability
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu") if use_cuda else "cpu"
-    logger.info('Runing on: {}'.format(device))
+    logger.info('Runing on: {} | available? {}'.format(device, torch.cuda.is_available()))
 
     torch.cuda.empty_cache()
     if model is None:
@@ -32,7 +37,7 @@ def train_model(dataloaders,
 
     since = time.time()
     qtd_images = 0
-    start_epoch = 1
+    start_epoch = 2
     dataset_train_size = len(dataloaders['train'].dataset)
     for epoch in range(start_epoch, n_epochs + 1):
 
@@ -101,7 +106,7 @@ def save_model(model_dir, model, patch_size, epoch, imgs, batch_size, optimizer,
     """
     Save the trained model
     """
-    filename = 'ORCA__Size-{}x{}_Epoch-{}_Images-{}_Batch-{}.pth'.format(patch_size[0], patch_size[1], epoch, imgs, batch_size)
+    filename = 'CAMELYON16+ORCA__Size-{}x{}_Epoch-{}_Images-{}_Batch-{}.pth'.format(patch_size[0], patch_size[1], epoch, imgs, batch_size)
     logger.info("Saving the model: '{}'".format(filename))
 
     filepath = os.path.join(model_dir, filename) if model_dir is not None else filename
@@ -124,7 +129,7 @@ def save_model(model_dir, model, patch_size, epoch, imgs, batch_size, optimizer,
 
 if __name__ == '__main__':
 
-    dataset_dir = "../../datasets/ORCA"
+    dataset_dir = "/media/dalifreire/CCB60537B6052394/Users/Dali/Downloads/ORCA" #"../../datasets/ORCA"
     model_dir = "../../models"
 
     batch_size = 1
@@ -141,12 +146,13 @@ if __name__ == '__main__':
     dataset_test_size = len(dataloaders['test'].dataset)
 
     # loads our u-net based model to continue previous training
-    # trained_model_version = "Epoch-1_Images-3111_Batch-1"
-    # trained_model_path="{}/{}".format(model_dir, 'ORCA__Size-{}x{}_{}.pth'.format(patch_size[0], patch_size[1], trained_model_version))
-    # model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
+    trained_model_version = "Epoch-1_Images-3111_Batch-1"
+    #trained_model_path="{}/{}".format(model_dir, 'ORCA__Size-{}x{}_{}.pth'.format(patch_size[0], patch_size[1], trained_model_version))
+    trained_model_path="{}/{}".format(model_dir, 'CAMELYON16+ORCA__Size-{}x{}_{}.pth'.format(patch_size[0], patch_size[1], trained_model_version))
+    model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
 
     # starts the training from scratch
-    model = None
+    #model = None
 
     # train the model
-    train_model(dataloaders=dataloaders, model=model, n_epochs=200)
+    train_model(dataloaders=dataloaders, model=model, n_epochs=100)
