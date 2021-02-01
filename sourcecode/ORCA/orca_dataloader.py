@@ -46,9 +46,9 @@ class ORCADataset(Dataset):
 
 def load_dataset(img_dir, img_input_size, dataset_type):
 
-    first_train = ""
-    with open("application.log", 'r') as file:
-        first_train = file.read()
+    #first_train = ""
+    #with open("application.log", 'r') as file:
+    #    first_train = file.read()
 
     images = []
     classes = ["tumor"]
@@ -65,19 +65,21 @@ def load_dataset(img_dir, img_input_size, dataset_type):
 
                 for img_number in sorted(img_n for img_n in img_dir):
 
-                    original_dir = "{}/{}/{}/01-original".format(class_root_dir, img_number, "01-roi")
-                    mask_dir = "{}/{}/{}/02-mask".format(class_root_dir, img_number, "01-roi")
-                    for _, _, fnames in sorted(os.walk(original_dir)):
-                        for fname in sorted(fnames):
+                    for patch_type in ["01-roi", "02-non_roi"]:
 
-                            path_img = os.path.join(original_dir, fname)
-                            path_mask = os.path.join(mask_dir, fname)
+                        original_dir = "{}/{}/{}/01-original".format(class_root_dir, img_number, patch_type)
+                        mask_dir = "{}/{}/{}/02-mask".format(class_root_dir, img_number, patch_type)
+                        for _, _, fnames in sorted(os.walk(original_dir)):
+                            for fname in sorted(fnames):
 
-                            #if is_valid_file(path_img) and first_train.find(fname) < 0:
-                            if is_valid_file(path_img):
-                                item = (path_img, path_mask, fname)
-                                images.append(item)
-    first_train = ""
+                                path_img = os.path.join(original_dir, fname)
+                                path_mask = os.path.join(mask_dir, fname)
+
+                                #if is_valid_file(path_img) and first_train.find(fname) < 0:
+                                if is_valid_file(path_img):
+                                    item = (path_img, path_mask, fname)
+                                    images.append(item)
+    #first_train = ""
     return images
 
 

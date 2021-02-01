@@ -114,7 +114,7 @@ def scale_down_wsi(wsi_image, magnification, use_openslide_propeties=True):
         large_w, large_h = wsi_image.dimensions
         new_w = math.floor(large_w / scale)
         new_h = math.floor(large_h / scale)
-        new_dimension = (new_w, new_h) if new_w > 100 else (new_w*2, new_h*2)
+        new_dimension = (new_w, new_h)
 
     return wsi_image.get_thumbnail(new_dimension)
 
@@ -148,6 +148,7 @@ def read_region(wsi_image_file, column, row, magnification=0.625, tile_size=20):
 
     # load image
     wsi_image = open_wsi(wsi_image_file)
+    max_w, max_h = wsi_image.dimensions
 
     scale = get_scale_by_magnification(magnification)
     level = wsi_image.get_best_level_for_downsample(scale)
@@ -155,10 +156,18 @@ def read_region(wsi_image_file, column, row, magnification=0.625, tile_size=20):
     tile_size_original = int(tile_size*scale)
     left = (column * tile_size_original)
     top = (row * tile_size_original)
+    tile_size_w = tile_size_original if (left + tile_size_original) <= max_w else (max_w - left)
+    tile_size_h = tile_size_original if (top + tile_size_original) <= max_h else (max_h - top)
 
-    #print("Reading regions: {}x{} mag: {} scale: {} level: 0".format(tile_size_original, tile_size_original, magnification, scale))
-    region_pil = wsi_image.read_region((left, top), 0, (tile_size_original, tile_size_original))
+    region_pil = wsi_image.read_region((left, top), 0, (tile_size_w, tile_size_h))
     region_np = np.asarray(region_pil)
+
+    if tile_size_w != tile_size_original or tile_size_h != tile_size_original:
+        np_region = np.full((tile_size_original, tile_size_original, 3), 255, dtype=np.uint8)
+        np_region[0:tile_size_h, 0:tile_size_w] = region_np[:, :, :3]
+
+        return np_to_pil(np_region), np_region
+
     return region_pil, region_np[:, :, :3]
 
 
