@@ -37,7 +37,7 @@ def train_model(dataloaders,
 
     since = time.time()
     qtd_images = 0
-    start_epoch = 2
+    start_epoch = 1
     dataset_train_size = len(dataloaders['train'].dataset)
     for epoch in range(start_epoch, n_epochs + 1):
 
@@ -106,7 +106,8 @@ def save_model(model_dir, model, patch_size, epoch, imgs, batch_size, optimizer,
     """
     Save the trained model
     """
-    filename = 'CAMELYON16+ORCA__Size-{}x{}_Epoch-{}_Images-{}_Batch-{}.pth'.format(patch_size[0], patch_size[1], epoch, imgs, batch_size)
+    #filename = 'ORCA__Size-{}x{}_Epoch-{}_Images-{}_Batch-{}.pth'.format(patch_size[0], patch_size[1], epoch, imgs, batch_size)
+    filename = 'OCDC+ORCA__Size-{}x{}_Epoch-{}_Images-{}_Batch-{}.pth'.format(patch_size[0], patch_size[1], epoch, imgs, batch_size)
     logger.info("Saving the model: '{}'".format(filename))
 
     filepath = os.path.join(model_dir, filename) if model_dir is not None else filename
@@ -146,9 +147,9 @@ if __name__ == '__main__':
     dataset_test_size = len(dataloaders['test'].dataset)
 
     # loads our u-net based model to continue previous training
-    trained_model_version = "Epoch-1_Images-3111_Batch-1"
-    #trained_model_path="{}/{}".format(model_dir, 'ORCA__Size-{}x{}_{}.pth'.format(patch_size[0], patch_size[1], trained_model_version))
-    trained_model_path="{}/{}".format(model_dir, 'CAMELYON16+ORCA__Size-{}x{}_{}.pth'.format(patch_size[0], patch_size[1], trained_model_version))
+    trained_model_version = "Epoch-1_Images-4181_Batch-1"
+    trained_model_path="{}/{}".format(model_dir, 'ORCA__Size-{}x{}_{}.pth'.format(patch_size[0], patch_size[1], trained_model_version))
+    #trained_model_path="{}/{}".format(model_dir, 'OCDC__Size-640x640_Color-LAB_Epoch-500_Images-840_Batch-1.pth')
     model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
 
     # starts the training from scratch
