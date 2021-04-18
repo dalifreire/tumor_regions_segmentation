@@ -483,8 +483,8 @@ def tissue_mask(np_img):
     # (which was validated to not throw out tumor data in the training set).
 
     np_tissue_mask = filter_purple_pink(np_img)
-    np_tissue_mask = fill_small_holes(np_tissue_mask, area_threshold=3000)
-    np_tissue_mask = remove_small_objects(np_tissue_mask, min_size=3000)
+    np_tissue_mask = fill_small_holes(np_tissue_mask, area_threshold=3000 if np_img.shape[0] > 500 else 30)
+    np_tissue_mask = remove_small_objects(np_tissue_mask, min_size=3000 if np_img.shape[0] > 500 else 30)
     return np_tissue_mask
 
 

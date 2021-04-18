@@ -1,6 +1,7 @@
 from sourcecode.dataloader_utils import *
 
 from torch.utils.data import Dataset
+from sklearn.model_selection import train_test_split
 
 import os.path
 
@@ -89,18 +90,41 @@ def create_dataloader(tile_size="640x640",
                       img_input_size=(640, 640),
                       img_output_size=(640, 640),
                       dataset_dir="../../datasets/ORCA",
-                      color_model="LAB"):
+                      color_model="LAB",
+                      validation_split=0.0):
+
     image_datasets = {x: ORCADataset(img_dir=dataset_dir,
                                      img_input_size=img_input_size, img_output_size=img_output_size,
-                                     dataset_type='training' if x == 'train' else 'testing',
+                                     dataset_type='testing' if x == 'test' else 'training',
                                      augmentation=True if x == 'train' else False,
-                                     color_model=color_model) for x in ['train', 'test']}
+                                     color_model=color_model) for x in ['train', 'valid', 'test']}
+    if validation_split > 0:
+
+        train_dataset_index, valid_dataset_index = train_test_split(range(len(image_datasets['train'])),
+                                                                    test_size=validation_split, random_state=0)
+        train_dataset_index.sort()
+        valid_dataset_index.sort()
+
+        train_dataset_samples = [image_datasets['train'].samples[index] for index in train_dataset_index]
+        valid_dataset_samples = [image_datasets['train'].samples[index] for index in valid_dataset_index]
+
+        image_datasets['train'].samples = train_dataset_samples
+        image_datasets['valid'].samples = valid_dataset_samples
 
     dataloaders = {
         x: torch.utils.data.DataLoader(image_datasets[x], batch_size=batch_size, shuffle=shuffle, num_workers=0) for x
-        in ['train', 'test']}
-    dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'test']}
+        in ['train', 'valid', 'test']}
+
+    dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'valid', 'test']}
+
+    if validation_split <= 0:
+        del image_datasets['valid']
+        del dataloaders['valid']
+        del dataset_sizes['valid']
 
     logger.info("Train images ({}): {} (augmentation: {})".format(tile_size, dataset_sizes['train'], image_datasets['train'].augmentation))
+    if validation_split > 0:
+        logger.info("Validation images ({}): {} (augmentation: {})".format(tile_size, dataset_sizes['valid'], image_datasets['valid'].augmentation))
     logger.info("Test images ({}): {} (augmentation: {})".format(tile_size, dataset_sizes['test'], image_datasets['test'].augmentation))
+
     return dataloaders
