@@ -2,6 +2,8 @@ import datetime
 import os
 import sys
 import time
+import copy
+import csv
 
 import torch.optim as optim
 from torch.autograd import Variable
@@ -102,6 +104,104 @@ def train_model(dataloaders,
     save_model(output_dir, model, patch_size, epoch, qtd_images, batch_size, optimizer, loss)
 
 
+def train_model_with_validation(dataloaders,
+                                model=None,
+                                patch_size=(640, 640),
+                                n_epochs=1,
+                                batch_size=1,
+                                use_cuda=True,
+                                output_dir="../../models"):
+
+    # Checking for GPU availability
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu") if use_cuda else "cpu"
+    logger.info('Runing on: {} | GPU available? {}'.format(device, torch.cuda.is_available()))
+
+    torch.cuda.empty_cache()
+    if model is None:
+        model = UNet(in_channels=3, out_channels=1, padding=True, img_input_size=patch_size).to(device)
+
+    best_model_wts = copy.deepcopy(model.state_dict())
+    best_acc = 0.0
+
+    criterion = nn.BCELoss().to(device)
+    optimizer = optim.Adam(model.parameters())
+    optimizer.zero_grad()
+
+    since = time.time()
+    qtd_images = 0
+    start_epoch = 1
+    with open("../../datasets/ORCA/training/training_loss.csv", mode='a+') as csv_file:
+
+        csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        csv_writer.writerow(['model', 'phase', 'epoch', 'loss', 'date'])
+
+        for epoch in range(start_epoch, n_epochs + 1):
+
+            time_elapsed = time.time() - since
+
+            logger.info("")
+            logger.info("-" * 20)
+            logger.info('Epoch {}/{} ({:.0f}m {:.0f}s) {}'.format(epoch, n_epochs, time_elapsed // 60, time_elapsed % 60,
+                                                                  datetime.datetime.now()))
+            logger.info("-" * 20)
+
+            # Each epoch has a training and validation phase
+            epoch_loss = {}
+            for phase in ['train', 'valid']:
+
+                if phase == 'train':
+                    model.train()  # Set model to training mode
+                else:
+                    model.eval()  # Set model to evaluate mode
+
+                running_loss = 0.0
+                for batch_idx, (data, target, fname, original_size) in enumerate(dataloaders[phase]):
+
+                    logger.info("\tfname: '{}' {}".format(fname[0], (batch_idx + 1)))
+
+                    data = Variable(data.to(device))
+                    target = Variable(target.to(device)).unsqueeze(1)
+                    # target = Variable(target.to(device))
+                    # print('X     --> {}'.format(data.size()))
+                    # print('y     --> {}'.format(target.size()))
+                    # print('          {}'.format(target))
+
+                    optimizer.zero_grad()
+                    with torch.set_grad_enabled(phase == 'train'):
+
+                        output = model(data)
+                        # output = model(data).squeeze(0)
+                        # print('y_hat --> {}'.format(output.size()))
+                        # print('          {}'.format(output))
+
+                        loss = criterion(output, target)
+                        # backward + optimize only if in training phase
+                        if phase == 'train':
+                            loss.backward()
+                            optimizer.step()
+
+                        torch.cuda.empty_cache()
+                        # statistics
+                        running_loss += loss.item() * data.size(0)
+                        qtd_images = (batch_idx + 1) * len(data) if phase == 'train' else qtd_images
+
+                epoch_loss[phase] = running_loss / len(dataloaders[phase].dataset)
+
+            # save the model - each epoch
+            filename = save_model(output_dir, model, patch_size, epoch, qtd_images , batch_size, optimizer, loss)
+
+            logger.info("-" * 20)
+            for phase in ['train', 'valid']:
+                print('[{}] Loss: {:.6f}'.format(phase, epoch_loss[phase]))
+                csv_writer.writerow([filename, phase, epoch, epoch_loss[phase], time.time()])
+
+    time_elapsed = time.time() - since
+    logger.info('-' * 20)
+    logger.info('{:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
+
+    save_model(output_dir, model, patch_size, epoch, qtd_images, batch_size, optimizer, loss)
+
+
 def save_model(model_dir, model, patch_size, epoch, imgs, batch_size, optimizer, loss):
     """
     Save the trained model
@@ -126,7 +226,7 @@ def save_model(model_dir, model, patch_size, epoch, imgs, batch_size, optimizer,
             'optimizer_state_dict': optimizer.state_dict(),
             'loss': loss
         }, f)
-
+    return filename
 
 if __name__ == '__main__':
 
