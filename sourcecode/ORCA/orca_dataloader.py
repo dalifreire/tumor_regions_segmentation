@@ -46,6 +46,7 @@ class ORCADataset(Dataset):
         if fname in self.used_images:
             self.epoch += 1
             self.used_images.clear()
+            logger.info("Epoch: '{}' augmentation {} {}".format(self.epoch, self.augmentation_strategy, self.augmentation))
         self.used_images.add(fname)
 
         augmentation_operations = []
