@@ -151,7 +151,7 @@ def train_model_with_validation(dataloaders,
                 model.eval()  # Set model to evaluate mode
 
             running_loss = 0.0
-            running_corrects = 0
+            running_accuracy = 0
             for batch_idx, (data, target, fname, original_size) in enumerate(dataloaders[phase]):
 
                 logger.info("\tfname: '{}' {}".format(fname[0], (batch_idx + 1)))
@@ -179,18 +179,18 @@ def train_model_with_validation(dataloaders,
 
                     torch.cuda.empty_cache()
 
-                    # statistics
-                    running_loss += loss.item() * data.size(0)
+                    preds = torch.zeros(output.size(), dtype=torch.double)
+                    preds[output >= 0.5] = 1.0
 
-                    output_bin = torch.zeros(output.size())
-                    output_bin[output >= 0.5] = 1
-                    _, preds = torch.max(output, 1)
-                    running_corrects += torch.sum(preds == target.data)
+                    # statistics
+                    acc = torch.sum(preds == target.data).numpy() / (data.size(0)*data.size(-1)*data.size(-2))
+                    running_loss += loss.item() * data.size(0)
+                    running_accuracy += acc
 
                     qtd_images = (batch_idx + 1) * len(data) if phase == 'train' else qtd_images
 
             epoch_loss[phase] = running_loss / len(dataloaders[phase].dataset)
-            epoch_acc[phase] = running_corrects.double() / len(dataloaders[phase].dataset)
+            epoch_acc[phase] = running_accuracy / len(dataloaders[phase].dataset)
 
         # save the model - each epoch
         filename = save_model(output_dir, model, patch_size, epoch, qtd_images , batch_size, optimizer, loss)
