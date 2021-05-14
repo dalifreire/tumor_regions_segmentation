@@ -109,7 +109,8 @@ def train_model_with_validation(dataloaders,
                                 n_epochs=1,
                                 batch_size=1,
                                 use_cuda=True,
-                                output_dir="../../models"):
+                                output_dir="../../models",
+                                augmentation_strategy="random"):
 
     # Checking for GPU availability
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu") if use_cuda else "cpu"
@@ -121,7 +122,7 @@ def train_model_with_validation(dataloaders,
 
     with open("../../datasets/ORCA/training/training_loss.csv", mode='a+') as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        csv_writer.writerow(['model', 'phase', 'epoch', 'loss', 'accuracy', 'date'])
+        csv_writer.writerow(['model', 'augmentation', 'phase', 'epoch', 'loss', 'accuracy', 'date'])
 
     criterion = nn.BCELoss().to(device)
     optimizer = optim.Adam(model.parameters())
@@ -145,10 +146,11 @@ def train_model_with_validation(dataloaders,
         epoch_acc = {}
         for phase in ['train', 'valid']:
 
-            if phase == 'train':
-                model.train()  # Set model to training mode
-            else:
-                model.eval()  # Set model to evaluate mode
+            model.train()
+            #if phase == 'train':
+            #    model.train()  # Set model to training mode
+            #else:
+            #    model.eval()  # Set model to evaluate mode
 
             running_loss = 0.0
             running_accuracy = 0
@@ -179,11 +181,11 @@ def train_model_with_validation(dataloaders,
 
                     torch.cuda.empty_cache()
 
-                    preds = torch.zeros(output.size(), dtype=torch.double)
+                    preds = torch.zeros(output.size(), dtype=torch.double).cuda()
                     preds[output >= 0.5] = 1.0
 
                     # statistics
-                    acc = torch.sum(preds == target.data).numpy() / (data.size(0)*data.size(-1)*data.size(-2))
+                    acc = torch.sum(preds == target.data).detach().cpu().numpy() / (data.size(0)*data.size(-1)*data.size(-2))
                     running_loss += loss.item() * data.size(0)
                     running_accuracy += acc
 
@@ -201,7 +203,7 @@ def train_model_with_validation(dataloaders,
             csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             for phase in ['train', 'valid']:
                 print('[{}] Loss: {:.6f}'.format(phase, epoch_loss[phase]))
-                csv_writer.writerow([filename, phase, epoch, epoch_loss[phase], epoch_acc[phase], datetime.datetime.now()])
+                csv_writer.writerow([filename, augmentation_strategy, phase, epoch, epoch_loss[phase], epoch_acc[phase], datetime.datetime.now()])
 
     time_elapsed = time.time() - since
     logger.info('-' * 20)
@@ -238,31 +240,31 @@ def save_model(model_dir, model, patch_size, epoch, imgs, batch_size, optimizer,
 
 if __name__ == '__main__':
 
-    dataset_dir = "/media/dalifreire/CCB60537B6052394/Users/Dali/Downloads/ORCA" #"../../datasets/ORCA"
+    dataset_dir = "../../datasets/ORCA" #"/media/dalifreire/CCB60537B6052394/Users/Dali/Downloads/ORCA" #
     model_dir = "../../models"
+    augmentation_strategy = "no_augmentation" # "no_augmentation", "one_by_epoch", #"random",
 
     batch_size = 1
     patch_size = (640, 640)
     color_model = "LAB"
     dataloaders = create_dataloader(tile_size="{}x{}".format(patch_size[0], patch_size[1]),
                                     batch_size=batch_size,
-                                    shuffle=True,
+                                    shuffle=False,
                                     img_input_size=patch_size,
                                     img_output_size=patch_size,
                                     dataset_dir=dataset_dir,
                                     color_model=color_model,
-                                    augmentation_strategy="random",
+                                    augmentation_strategy=augmentation_strategy,
                                     start_epoch=1,
                                     validation_split=0.2)
 
     # loads our u-net based model to continue previous training
-    #trained_model_version = "Epoch-1_Images-4181_Batch-1"
-    #trained_model_path="{}/{}".format(model_dir, 'ORCA__Size-{}x{}_{}.pth'.format(patch_size[0], patch_size[1], trained_model_version))
-    #trained_model_path="{}/{}".format(model_dir, 'OCDC__Size-640x640_Color-LAB_Epoch-500_Images-840_Batch-1.pth')
-    #model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
+    trained_model_version = "Epoch-73_Images-3344_Batch-1__no_augmentation" #"Epoch-1_Images-3344_Batch-1"
+    trained_model_path = "{}/{}".format(model_dir, 'ORCA__Size-{}x{}_{}.pth'.format(patch_size[0], patch_size[1], trained_model_version))
+    model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
 
     # starts the training from scratch
-    model = None
+    #model = None
 
     # train the model
-    train_model_with_validation(dataloaders=dataloaders, model=model, n_epochs=100)
+    train_model_with_validation(dataloaders=dataloaders, model=model, n_epochs=100, augmentation_strategy=augmentation_strategy)

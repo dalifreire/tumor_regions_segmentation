@@ -1,10 +1,14 @@
 import datetime
-import math
 import os
+import sys
 import time
 
 import torch.optim as optim
 from torch.autograd import Variable
+
+current_path = os.path.abspath('.')
+root_path = os.path.dirname(os.path.dirname(current_path))
+sys.path.append(root_path)
 
 from sourcecode.CAMELYON16.camelyon16_dataloader import *
 from sourcecode.unet_model import *
@@ -76,7 +80,7 @@ def train_model(dataloaders,
                     100. * (((batch_idx + 1) * len(data)) / dataset_train_size),
                     loss.item()))
 
-            #if qtd_images % 500 == 0:
+            #if qtd_images % 1000 == 0:
             #    save_model(output_dir, model, patch_size, epoch, qtd_images , batch_size, optimizer, loss)
 
             if loss.item() < 0.0000001 or math.isnan(loss.item()):
@@ -95,7 +99,7 @@ def train_model(dataloaders,
     logger.info('-' * 20)
     logger.info('{:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
 
-    save_model(output_dir, model, patch_size, epoch, qtd_images, batch_size, optimizer, loss)
+    save_model(output_dir, model, patch_size, epoch, qtd_images , batch_size, optimizer, loss)
 
 
 def save_model(model_dir, model, patch_size, epoch, imgs, batch_size, optimizer, loss):
@@ -125,7 +129,7 @@ def save_model(model_dir, model, patch_size, epoch, imgs, batch_size, optimizer,
 
 if __name__ == '__main__':
 
-    dataset_dir = "../../datasets/CAMELYON16"
+    dataset_dir = "../../datasets/CAMELYON16" #"/media/dalifreire/CCB60537B6052394/Users/Dali/Downloads/CAMELYON16"
     model_dir = "../../models"
 
     batch_size = 1

@@ -40,6 +40,7 @@ class ORCADataset(Dataset):
         #self.used_images.add(fname)
 
         #x, y = data_augmentation(image, mask, self.img_input_size, self.img_output_size, should_augment)
+        #x, y = data_augmentation(image, mask, self.img_input_size, self.img_output_size, False)
         x, y = data_augmentation(image, mask, self.img_input_size, self.img_output_size, self.augmentation)
         return x, y, fname, image.size
 

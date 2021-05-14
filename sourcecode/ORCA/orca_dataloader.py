@@ -46,7 +46,6 @@ class ORCADataset(Dataset):
         if fname in self.used_images:
             self.epoch += 1
             self.used_images.clear()
-            logger.info("Epoch: '{}' augmentation {} {}".format(self.epoch, self.augmentation_strategy, self.augmentation))
         self.used_images.add(fname)
 
         augmentation_operations = []
@@ -64,6 +63,10 @@ class ORCADataset(Dataset):
 
             idx = (self.epoch-1) % len(self.augmentation)
             augmentation_operations.append(self.augmentation[idx])
+
+        if len(self.used_images) <= 1:
+            logger.info("Epoch: '{}' augmentation {} {}".format(self.epoch, self.augmentation_strategy,
+                                                                augmentation_operations))
 
         #x, y = data_augmentation(image, mask, self.img_input_size, self.img_output_size, should_augment)
         #x, y = data_augmentation(image, mask, self.img_input_size, self.img_output_size, False)
