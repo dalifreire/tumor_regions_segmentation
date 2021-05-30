@@ -120,7 +120,7 @@ def train_model_with_validation(dataloaders,
     if model is None:
         model = UNet(in_channels=3, out_channels=1, padding=True, img_input_size=patch_size).to(device)
 
-    with open("../../datasets/ORCA/training/training_loss_512x512.csv", mode='a+') as csv_file:
+    with open("../../datasets/ORCA_512x512/training/training_loss_512x512.csv", mode='a+') as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer.writerow(['model', 'augmentation', 'phase', 'epoch', 'loss', 'accuracy', 'date'])
 
@@ -195,11 +195,11 @@ def train_model_with_validation(dataloaders,
             epoch_acc[phase] = running_accuracy / len(dataloaders[phase].dataset)
 
         # save the model - each epoch
-        filename = save_model(output_dir, model, patch_size, epoch, qtd_images , batch_size, optimizer, loss)
+        filename = save_model(output_dir, model, patch_size, epoch, qtd_images , batch_size, augmentation_strategy, optimizer, loss)
 
         logger.info("-" * 20)
 
-        with open("../../datasets/ORCA/training/training_loss_512x512.csv", mode='a+') as csv_file:
+        with open("../../datasets/ORCA_512x512/training/training_loss_512x512.csv", mode='a+') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             for phase in ['train', 'valid']:
                 print('[{}] Loss: {:.6f}'.format(phase, epoch_loss[phase]))
@@ -209,14 +209,14 @@ def train_model_with_validation(dataloaders,
     logger.info('-' * 20)
     logger.info('{:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
 
-    save_model(output_dir, model, patch_size, epoch, qtd_images, batch_size, optimizer, loss)
+    save_model(output_dir, model, patch_size, epoch, qtd_images, batch_size, augmentation_strategy, optimizer, loss)
 
 
-def save_model(model_dir, model, patch_size, epoch, imgs, batch_size, optimizer, loss):
+def save_model(model_dir, model, patch_size, epoch, imgs, batch_size, augmentation_strategy, optimizer, loss):
     """
     Save the trained model
     """
-    filename = 'ORCA__Size-{}x{}_Epoch-{}_Images-{}_Batch-{}.pth'.format(patch_size[0], patch_size[1], epoch, imgs, batch_size)
+    filename = 'ORCA__Size-{}x{}_Epoch-{}_Images-{}_Batch-{}__{}.pth'.format(patch_size[0], patch_size[1], epoch, imgs, batch_size, augmentation_strategy)
     logger.info("Saving the model: '{}'".format(filename))
 
     filepath = os.path.join(model_dir, filename) if model_dir is not None else filename
@@ -237,20 +237,20 @@ def save_model(model_dir, model, patch_size, epoch, imgs, batch_size, optimizer,
         }, f)
     return filename
 
+
 if __name__ == '__main__':
 
-    dataset_dir = "../../datasets/ORCA_512x512" #"/media/dalifreire/CCB60537B6052394/Users/Dali/Downloads/ORCA" #
-    model_dir = "../../models"
+    # dataset_dir = "../../datasets/ORCA_512x512"
+    dataset_dir = "/media/dalifreire/CCB60537B6052394/Users/Dali/Downloads/ORCA_512x512"
+    # model_dir = "../../models"
+    model_dir = "/media/dalifreire/CCB60537B6052394/Users/Dali/Downloads/models"
     augmentation_strategy = "no_augmentation" # "no_augmentation", "one_by_epoch", #"random",
 
     batch_size = 1
     patch_size = (512, 512)
     color_model = "LAB"
-    dataloaders = create_dataloader(tile_size="{}x{}".format(patch_size[0], patch_size[1]),
-                                    batch_size=batch_size,
+    dataloaders = create_dataloader(batch_size=batch_size,
                                     shuffle=False,
-                                    img_input_size=patch_size,
-                                    img_output_size=patch_size,
                                     dataset_dir=dataset_dir,
                                     color_model=color_model,
                                     augmentation_strategy=augmentation_strategy,
@@ -258,7 +258,7 @@ if __name__ == '__main__':
                                     validation_split=0.2)
 
     # loads our u-net based model to continue previous training
-    #trained_model_version = "Epoch-73_Images-3344_Batch-1__no_augmentation" #"Epoch-1_Images-3344_Batch-1"
+    #trained_model_version = "Epoch-1_Images-80_Batch-1__no_augmentation" #"Epoch-1_Images-3344_Batch-1"
     #trained_model_path = "{}/{}".format(model_dir, 'ORCA__Size-{}x{}_{}.pth'.format(patch_size[0], patch_size[1], trained_model_version))
     #model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
 
@@ -266,4 +266,8 @@ if __name__ == '__main__':
     model = None
 
     # train the model
-    train_model_with_validation(dataloaders=dataloaders, model=model, n_epochs=100, augmentation_strategy=augmentation_strategy)
+    train_model_with_validation(dataloaders=dataloaders,
+                                model=model,
+                                n_epochs=500,
+                                output_dir=model_dir,
+                                augmentation_strategy=augmentation_strategy)
