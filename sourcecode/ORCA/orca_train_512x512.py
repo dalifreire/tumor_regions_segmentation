@@ -128,6 +128,9 @@ def train_model_with_validation(dataloaders,
     optimizer = optim.Adam(model.parameters())
     optimizer.zero_grad()
 
+    best_loss = 1.0
+    best_acc = 0.0
+
     since = time.time()
     qtd_images = 0
     start_epoch = 1
@@ -195,7 +198,13 @@ def train_model_with_validation(dataloaders,
             epoch_acc[phase] = running_accuracy / len(dataloaders[phase].dataset)
 
         # save the model - each epoch
-        filename = save_model(output_dir, model, patch_size, epoch, qtd_images , batch_size, augmentation_strategy, optimizer, loss)
+        if epoch_loss[phase] < best_loss or epoch_acc[phase] > best_acc:
+            filename = save_model(output_dir, model, patch_size, epoch, qtd_images , batch_size, augmentation_strategy, optimizer, loss)
+
+        if epoch_loss[phase] < best_loss:
+            best_loss = epoch_loss[phase]
+        if epoch_acc[phase] > best_acc:
+            best_acc = epoch_acc[phase]
 
         logger.info("-" * 20)
 
@@ -244,7 +253,7 @@ if __name__ == '__main__':
     dataset_dir = "/media/dalifreire/CCB60537B6052394/Users/Dali/Downloads/ORCA_512x512"
     # model_dir = "../../models"
     model_dir = "/media/dalifreire/CCB60537B6052394/Users/Dali/Downloads/models"
-    augmentation_strategy = "no_augmentation" # "no_augmentation", "one_by_epoch", #"random",
+    augmentation_strategy = "random" # "no_augmentation", "one_by_epoch", #"random",
 
     batch_size = 1
     patch_size = (512, 512)
