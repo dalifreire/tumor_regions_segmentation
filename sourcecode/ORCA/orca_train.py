@@ -128,6 +128,9 @@ def train_model_with_validation(dataloaders,
     optimizer = optim.Adam(model.parameters())
     optimizer.zero_grad()
 
+    best_loss = 1.0
+    best_acc = 0.0
+
     since = time.time()
     qtd_images = 0
     start_epoch = 1
@@ -195,7 +198,13 @@ def train_model_with_validation(dataloaders,
             epoch_acc[phase] = running_accuracy / len(dataloaders[phase].dataset)
 
         # save the model - each epoch
-        filename = save_model(output_dir, model, patch_size, epoch, qtd_images , batch_size, optimizer, loss)
+        if epoch_loss[phase] < best_loss or epoch_acc[phase] > best_acc:
+            filename = save_model(output_dir, model, patch_size, epoch, qtd_images , batch_size, augmentation_strategy, optimizer, loss)
+
+        if epoch_loss[phase] < best_loss:
+            best_loss = epoch_loss[phase]
+        if epoch_acc[phase] > best_acc:
+            best_acc = epoch_acc[phase]
 
         logger.info("-" * 20)
 
@@ -209,14 +218,14 @@ def train_model_with_validation(dataloaders,
     logger.info('-' * 20)
     logger.info('{:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
 
-    save_model(output_dir, model, patch_size, epoch, qtd_images, batch_size, optimizer, loss)
+    save_model(output_dir, model, patch_size, epoch, qtd_images, batch_size, augmentation_strategy, optimizer, loss)
 
 
-def save_model(model_dir, model, patch_size, epoch, imgs, batch_size, optimizer, loss):
+def save_model(model_dir, model, patch_size, epoch, imgs, batch_size, augmentation_strategy, optimizer, loss):
     """
     Save the trained model
     """
-    filename = 'ORCA__Size-{}x{}_Epoch-{}_Images-{}_Batch-{}.pth'.format(patch_size[0], patch_size[1], epoch, imgs, batch_size)
+    filename = 'ORCA__Size-{}x{}_Epoch-{}_Images-{}_Batch-{}__{}.pth'.format(patch_size[0], patch_size[1], epoch, imgs, batch_size, augmentation_strategy)
     #filename = 'OCDC+ORCA__Size-{}x{}_Epoch-{}_Images-{}_Batch-{}.pth'.format(patch_size[0], patch_size[1], epoch, imgs, batch_size)
     logger.info("Saving the model: '{}'".format(filename))
 
@@ -240,9 +249,11 @@ def save_model(model_dir, model, patch_size, epoch, imgs, batch_size, optimizer,
 
 if __name__ == '__main__':
 
-    dataset_dir = "../../datasets/ORCA" #"/media/dalifreire/CCB60537B6052394/Users/Dali/Downloads/ORCA" #
-    model_dir = "../../models"
-    augmentation_strategy = "no_augmentation" # "no_augmentation", "one_by_epoch", #"random",
+    # dataset_dir = "../../datasets/ORCA"
+    dataset_dir = "/media/dalifreire/CCB60537B6052394/Users/Dali/Downloads/ORCA"
+    # model_dir = "../../models"
+    model_dir = "/media/dalifreire/CCB60537B6052394/Users/Dali/Downloads/models"
+    augmentation_strategy = "random" # "no_augmentation", "one_by_epoch", #"random",
 
     batch_size = 1
     patch_size = (640, 640)
@@ -259,12 +270,16 @@ if __name__ == '__main__':
                                     validation_split=0.2)
 
     # loads our u-net based model to continue previous training
-    trained_model_version = "Epoch-73_Images-3344_Batch-1__no_augmentation" #"Epoch-1_Images-3344_Batch-1"
-    trained_model_path = "{}/{}".format(model_dir, 'ORCA__Size-{}x{}_{}.pth'.format(patch_size[0], patch_size[1], trained_model_version))
-    model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
+    # trained_model_version = "ORCA__Size-640x640_Epoch-126_Images-3344_Batch-1__random"
+    # trained_model_path = "{}/{}.pth".format(model_dir, trained_model_version)
+    # model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
 
     # starts the training from scratch
-    #model = None
+    model = None
 
     # train the model
-    train_model_with_validation(dataloaders=dataloaders, model=model, n_epochs=100, augmentation_strategy=augmentation_strategy)
+    train_model_with_validation(dataloaders=dataloaders,
+                                model=model,
+                                n_epochs=200,
+                                augmentation_strategy=augmentation_strategy,
+                                output_dir=model_dir)
