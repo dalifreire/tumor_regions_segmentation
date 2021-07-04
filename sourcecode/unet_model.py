@@ -264,11 +264,12 @@ def load_checkpoint(file_path='checkpoints/UNet_IN-1_OUT-2_UPMODE-ConvTranspose_
                                                                                      img_input_size=img_input_size)
         model.load_state_dict(checkpoint['model_state_dict'])
 
-    logger.info('\t Model loaded on: {} / {} / {} / {} -> {}'.format(device,
-                                                                     model_in_channels,
-                                                                     model_out_channels,
-                                                                     img_input_size,
-                                                                     file_path))
+    logger.info('\t Model loaded on: {} / {} / {} / {} / {} params -> {}'.format(device,
+                                                                                 model_in_channels,
+                                                                                 model_out_channels,
+                                                                                 img_input_size,
+                                                                                 count_parameters(model),
+                                                                                 file_path))
     return model
 
 
@@ -276,3 +277,7 @@ def key_check(key, arr, default):
     if key in arr.keys():
         return arr[key]
     return default
+
+
+def count_parameters(model):
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
