@@ -1,9 +1,14 @@
 import datetime
 import os
+import sys
 import time
 
 import torch.optim as optim
 from torch.autograd import Variable
+
+current_path = os.path.abspath('.')
+root_path = os.path.dirname(os.path.dirname(current_path))
+sys.path.append(root_path)
 
 from sourcecode.OCDC.ocdc_dataloader import *
 from sourcecode.unet_model import *
@@ -75,8 +80,8 @@ def train_model(dataloaders,
                     100. * (((batch_idx + 1) * len(data)) / dataset_train_size),
                     loss.item()))
 
-            if qtd_images % 500 == 0:
-                save_model(output_dir, model, patch_size, epoch, qtd_images , batch_size, optimizer, loss)
+            #if qtd_images % 500 == 0:
+            #    save_model(output_dir, model, patch_size, epoch, qtd_images , batch_size, optimizer, loss)
 
             if loss.item() < 0.0000001 or math.isnan(loss.item()):
                 logger.warn("\tBatch: {} (too little loss: {:.15f})".format((batch_idx + 1), loss.item()))
