@@ -198,8 +198,8 @@ def train_model_with_validation(dataloaders,
             epoch_acc[phase] = running_accuracy / len(dataloaders[phase].dataset)
 
         # save the model - each epoch
-        if epoch_loss[phase] < best_loss or epoch_acc[phase] > best_acc:
-            filename = save_model(output_dir, model, patch_size, epoch, qtd_images , batch_size, augmentation_strategy, optimizer, loss)
+        # if epoch_loss[phase] < best_loss or epoch_acc[phase] > best_acc:
+        filename = save_model(output_dir, model, patch_size, epoch, qtd_images , batch_size, augmentation_strategy, optimizer, loss)
 
         if epoch_loss[phase] < best_loss:
             best_loss = epoch_loss[phase]
@@ -217,6 +217,7 @@ def train_model_with_validation(dataloaders,
     time_elapsed = time.time() - since
     logger.info('-' * 20)
     logger.info('{:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
+    logger.info('Best accuracy: {}'.format(best_acc))
 
     save_model(output_dir, model, patch_size, epoch, qtd_images, batch_size, augmentation_strategy, optimizer, loss)
 
@@ -253,7 +254,9 @@ if __name__ == '__main__':
     dataset_dir = "/media/dalifreire/CCB60537B6052394/Users/Dali/Downloads/ORCA"
     # model_dir = "../../models"
     model_dir = "/media/dalifreire/CCB60537B6052394/Users/Dali/Downloads/models"
+
     augmentation_strategy = "random" # "no_augmentation", "one_by_epoch", #"random",
+    augmentation = [None, "horizontal_flip", "vertical_flip", "rotation", "transpose"]
 
     batch_size = 1
     patch_size = (640, 640)
@@ -265,12 +268,13 @@ if __name__ == '__main__':
                                     img_output_size=patch_size,
                                     dataset_dir=dataset_dir,
                                     color_model=color_model,
+                                    augmentation=augmentation,
                                     augmentation_strategy=augmentation_strategy,
                                     start_epoch=1,
                                     validation_split=0.2)
 
     # loads our u-net based model to continue previous training
-    # trained_model_version = "ORCA__Size-640x640_Epoch-126_Images-3344_Batch-1__random"
+    # trained_model_version = "ORCA__Size-640x640_Epoch-102_Images-3344_Batch-1__one_by_epoch_4_operations"
     # trained_model_path = "{}/{}.pth".format(model_dir, trained_model_version)
     # model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
 
