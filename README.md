@@ -55,11 +55,14 @@ A total of 15 whole slide images were digitized using the Slide Scanner Aperio A
 
 Details about the ODCD dataset are available at [datasets/OCDC folder](datasets/OCDC).
 
+![](images/ocdc-results.svg)
+
 ## CAMELYON16
 The [CAMELYON16 dataset](https://camelyon16.grand-challenge.org) is a publicly available dataset with a combination of 399 WSIs of sentinel lymph node with breast cancer metastases tissue sections collected from two medical centers in the Netherlands for the [CAMELYON16 challenge](https://doi.org/10.1001/jama.2017.14585). These 399 WSIs were split into 270 for training and 129 for testing. The ground truth data for training and testing were provided as XML files containing the vertices of the delineation of tumor regions at WSI level. 
 
 Details about the CAMELYON16 dataset are available at [datasets/CAMELYON16 folder](datasets/CAMELYON16).
 
+![](images/camelyon16-results.svg)
 
 ## ORCA
 The [ORal Cancer Annotated dataset (ORCA)](https://sites.google.com/unibas.it/orca) is a collection of 200 OSCC annotated images derived from the [Cancer Genome Atlas (TCGA) dataset](https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga). 
@@ -80,10 +83,6 @@ To provide better understanding and make this work as reproducible as possible, 
 
 Dalí F. D. dos Santos (dalifreire@gmail.com)
 
-<!---
 # Publications
 
-[1](https://ieeexplore.ieee.org/document/9145157) D. F. D. dos Santos, T. A. A. Tosta, A. B. Silva, P. R. de Faria, B. A. N. Travençolo and M. Z. do Nascimento, "Automated Nuclei Segmentation on Dysplastic Oral Tissues Using CNN," 2020 International Conference on Systems, Signals and Image Processing (IWSSIP), Niterói, Brazil, 2020, pp. 45-50, doi: 10.1109/IWSSIP48289.2020.9145157.
-
-[2]() D. F. D. dos Santos, A. B. Silva, P. R. de Faria, B. A. N. Travençolo and M. Z. do Nascimento, "Impacts of Color Space Transformations on Dysplastic Nuclei Segmentation Using CNN," Proceedings of the XVI Workshop de Visão Computacional, Uberlândia, Brazil, 2020, pp. 6-11.
--->
+[1](https://doi.org/10.1016/j.bspc.2021.102921) Dalí F. D. dos Santos, Paulo R. de Faria, Bruno A. N. Travençolo, Marcelo Z. do Nascimento, Automated detection of tumor regions from oral histological whole slide images using fully convolutional neural networks, Biomedical Signal Processing and Control, Volume 69, 2021, 102921, ISSN 1746-8094, https://doi.org/10.1016/j.bspc.2021.102921.
