@@ -15,7 +15,8 @@ Automated Detection of Tumor Regions from H&amp;E-stained Whole Slide Images Usi
             <li><a href="#orca">ORCA</a></li>
         </ul>
     </li>
-    <li><a href="#sourcecode">Sourcecode</a></li>
+    <li><a href="#source-code">Source code</a></li>
+    <li><a href="#publications">Publications</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
