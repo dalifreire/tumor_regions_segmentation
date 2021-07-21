@@ -65,7 +65,7 @@ Details about the CAMELYON16 dataset are available at [datasets/CAMELYON16 folde
 ![](images/camelyon16-results.svg)
 
 ## ORCA
-The [ORal Cancer Annotated dataset (ORCA)](https://sites.google.com/unibas.it/orca) is a collection of 200 OSCC annotated images derived from the [Cancer Genome Atlas (TCGA) dataset](https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga). 
+The [ORal Cancer Annotated dataset (ORCA)](https://sites.google.com/unibas.it/orca) is a collection of 200 OSCC annotated images derived from the [Cancer Genome Atlas (TCGA) dataset](https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga). The ORCA dataset was built using TMA images obtained by selecting 200 core tissue regions containing representative tumor areas. The 200 labeled images are split into 100 images to train and 100 to test and contain images with two different dimensions: 4,500×4,500 or 2,250×2,250 pixels.
 
 Details about the ORCA dataset are available at [datasets/ORCA folder](datasets/ORCA).
 
@@ -79,10 +79,13 @@ To provide better understanding and make this work as reproducible as possible, 
 
 
 
-# Contact
-
-Dalí F. D. dos Santos (dalifreire@gmail.com)
 
 # Publications
 
 [1](https://doi.org/10.1016/j.bspc.2021.102921) Dalí F. D. dos Santos, Paulo R. de Faria, Bruno A. N. Travençolo, Marcelo Z. do Nascimento, Automated detection of tumor regions from oral histological whole slide images using fully convolutional neural networks, Biomedical Signal Processing and Control, Volume 69, 2021, 102921, ISSN 1746-8094, https://doi.org/10.1016/j.bspc.2021.102921.
+
+
+
+# Contact
+
+Dalí F. D. dos Santos (dalifreire@gmail.com)
