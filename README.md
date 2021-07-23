@@ -16,7 +16,7 @@ Automated Detection of Tumor Regions from H&amp;E-stained Whole Slide Images Usi
         </ul>
     </li>
     <li><a href="#source-code">Source code</a></li>
-    <li><a href="#howtocite">How to cite</a></li>
+    <li><a href="#how-to-cite">How to cite</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
