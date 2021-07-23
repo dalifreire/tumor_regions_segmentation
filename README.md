@@ -16,7 +16,7 @@ Automated Detection of Tumor Regions from H&amp;E-stained Whole Slide Images Usi
         </ul>
     </li>
     <li><a href="#source-code">Source code</a></li>
-    <li><a href="#publications">Publications</a></li>
+    <li><a href="#howtocite">How to cite</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
@@ -81,7 +81,7 @@ To provide better understanding and make this work as reproducible as possible, 
 
 
 
-# Publications
+# How to cite
 
 [1](https://doi.org/10.1016/j.bspc.2021.102921) Dalí F. D. dos Santos, Paulo R. de Faria, Bruno A. N. Travençolo, Marcelo Z. do Nascimento, Automated detection of tumor regions from oral histological whole slide images using fully convolutional neural networks, Biomedical Signal Processing and Control, Volume 69, 2021, 102921, ISSN 1746-8094, https://doi.org/10.1016/j.bspc.2021.102921.
 
