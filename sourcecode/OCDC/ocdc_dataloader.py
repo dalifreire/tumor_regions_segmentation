@@ -1,3 +1,10 @@
+import os
+import sys
+
+current_path = os.path.abspath('.')
+root_path = os.path.dirname(os.path.dirname(current_path))
+sys.path.append(root_path)
+
 from sourcecode.dataloader_utils import *
 
 from torch.utils.data import Dataset
@@ -54,12 +61,12 @@ class ORCADataset(Dataset):
 
             augmentation_operations = None
 
-        elif self.augmentation_strategy == 'random':
+        elif 'random' in self.augmentation_strategy:
 
             augmentation_operations = self.augmentation.copy()
             augmentation_operations.remove(None)
 
-        elif self.augmentation_strategy == 'one_by_epoch':
+        elif 'one_by_epoch' in self.augmentation_strategy:
 
             idx = (self.epoch-1) % len(self.augmentation)
             augmentation_operations.append(self.augmentation[idx])
