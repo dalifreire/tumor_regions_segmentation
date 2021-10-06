@@ -135,7 +135,7 @@ def train_model_with_validation(dataloaders,
 
     since = time.time()
     qtd_images = 0
-    start_epoch = 1
+    start_epoch = 2
     for epoch in range(start_epoch, n_epochs + 1):
 
         time_elapsed = time.time() - since
@@ -282,7 +282,7 @@ if __name__ == '__main__':
                                     color_model=color_model,
                                     augmentation=augmentation,
                                     augmentation_strategy=augmentation_strategy,
-                                    start_epoch=1,
+                                    start_epoch=2,
                                     validation_split=0.0)
 
     # loads our u-net based model to continue previous training
@@ -291,7 +291,7 @@ if __name__ == '__main__':
     #model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
 
     # starts the training from scratch
-    model = None
+    # model = None
 
     # train the model
     train_model_with_validation(dataloaders=dataloaders,
