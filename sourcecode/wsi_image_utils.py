@@ -426,6 +426,35 @@ def hsv_to_rgb(np_img):
     return sk_color.hsv2rgb(np_img)
 
 
+def transfer_color(np_original_img_lab, np_target_img_lab, L_threshold=0.86):
+
+    original_img_cbar_l = np_original_img_lab[:, :, 0][(np_original_img_lab[:, :, 0] < L_threshold)].mean()
+    original_img_cbar_a = np_original_img_lab[:, :, 1][(np_original_img_lab[:, :, 0] < L_threshold)].mean()
+    original_img_cbar_b = np_original_img_lab[:, :, 2][(np_original_img_lab[:, :, 0] < L_threshold)].mean()
+
+    target_img_cbar_l = np_target_img_lab[:, :, 0][(np_target_img_lab[:, :, 0] < L_threshold)].mean()
+    target_img_cbar_a = np_target_img_lab[:, :, 1][(np_target_img_lab[:, :, 0] < L_threshold)].mean()
+    target_img_cbar_b = np_target_img_lab[:, :, 2][(np_target_img_lab[:, :, 0] < L_threshold)].mean()
+
+    original_img_psc = np.copy(np_original_img_lab)
+    original_img_psc[:, :, 0][(np_original_img_lab[:, :, 0] >= L_threshold)] = 0
+    original_img_psc[:, :, 1][(np_original_img_lab[:, :, 0] >= L_threshold)] = -127
+    original_img_psc[:, :, 2][(np_original_img_lab[:, :, 0] >= L_threshold)] = -127
+
+    target_img_psc = np.copy(np_target_img_lab)
+    target_img_psc[:, :, 0][(np_target_img_lab[:, :, 0] >= L_threshold)] = 0
+    target_img_psc[:, :, 1][(np_target_img_lab[:, :, 0] >= L_threshold)] = -127
+    target_img_psc[:, :, 2][(np_target_img_lab[:, :, 0] >= L_threshold)] = -127
+
+    augmented_img = np.copy(np_original_img_lab)
+    augmented_img[:, :, 0][(np_original_img_lab[:, :, 0] < L_threshold)] = augmented_img[:, :, 0][(np_original_img_lab[:, :, 0] < L_threshold)] - original_img_cbar_l + target_img_cbar_l
+    augmented_img[:, :, 1][(np_original_img_lab[:, :, 0] < L_threshold)] = augmented_img[:, :, 1][(np_original_img_lab[:, :, 0] < L_threshold)] - original_img_cbar_a + target_img_cbar_a
+    augmented_img[:, :, 2][(np_original_img_lab[:, :, 0] < L_threshold)] = augmented_img[:, :, 2][(np_original_img_lab[:, :, 0] < L_threshold)] - original_img_cbar_b + target_img_cbar_b
+    
+    return original_img_psc, target_img_psc, augmented_img
+
+
+
 def filter_purple_pink(np_img, output_type="bool"):
     """
     Create a mask to filter out pixels where the values are similar to purple and pink.

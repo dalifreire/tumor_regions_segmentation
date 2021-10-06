@@ -39,6 +39,7 @@ class ORCADataset(Dataset):
         return len(self.samples)
 
     def __getitem__(self, idx):
+
         path_img, path_mask, fname = self.samples[idx]
         image = load_pil_image(path_img, False, self.color_model)
         mask = load_pil_image(path_mask) if is_valid_file(path_mask) else None
@@ -47,8 +48,8 @@ class ORCADataset(Dataset):
         return [x, y if mask is not None else path_mask, fname, original_size]
 
     def transform(self, image, mask, fname):
-        #should_augment = False
-        #should_augment = (self.augmentation and fname in self.used_images)
+
+        target_img = None
 
         if fname in self.used_images:
             self.epoch += 1
@@ -56,10 +57,13 @@ class ORCADataset(Dataset):
         self.used_images.add(fname)
 
         augmentation_operations = []
-        if self.augmentation_strategy == "no_augmentation" \
-                or (self.augmentation_strategy == 'random' and self.epoch == 1):
+        if self.augmentation_strategy == "no_augmentation" or self.epoch == 1:
 
             augmentation_operations = None
+        
+        elif 'color_augmentation' in self.augmentation_strategy:
+            
+            augmentation_operations.append("color_transfer")
 
         elif 'random' in self.augmentation_strategy:
 
@@ -71,13 +75,19 @@ class ORCADataset(Dataset):
             idx = (self.epoch-1) % len(self.augmentation)
             augmentation_operations.append(self.augmentation[idx])
 
+        if self.epoch > 1 and 'color_transfer' in augmentation_operations:
+
+            target_img_idx = random.randrange(len(self.samples))
+            path_img_target, path_mask_target, fname_target = self.samples[target_img_idx-1]
+            target_img = load_pil_image(path_img_target, False, self.color_model)
+
         if len(self.used_images) <= 1:
             logger.info("Epoch: '{}' augmentation {} {}".format(self.epoch, self.augmentation_strategy,
                                                                 augmentation_operations))
 
         #x, y = data_augmentation(image, mask, self.img_input_size, self.img_output_size, should_augment)
         #x, y = data_augmentation(image, mask, self.img_input_size, self.img_output_size, False)
-        x, y, used_augmentations = data_augmentation(image, mask, self.img_input_size, self.img_output_size, augmentation_operations)
+        x, y, used_augmentations = data_augmentation(image, target_img, mask, self.img_input_size, self.img_output_size, augmentation_operations)
         return x, y, fname, image.size
 
 
