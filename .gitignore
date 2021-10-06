@@ -5,3 +5,8 @@
 /sourcecode/ORCA/.ipynb_checkpoints/
 /sourcecode/OCDC/application.log
 /sourcecode/OCDC/.ipynb_checkpoints/
+/.idea/
+__pycache__
+/datasets/
+/models/
+.vscode/settings.json

@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 
 from sourcecode.wsi_image_utils import *
 from sourcecode.logger_utils import *
+from torchvision import transforms
 
 from albumentations import (
     Transpose,
@@ -20,9 +21,10 @@ def is_valid_file(filename, extensions=('.jpg', '.bmp', '.tif', '.png')):
     return str(filename).lower().endswith(extensions)
 
 
-def data_augmentation(input_image, output_mask, img_input_size=(640, 640), img_output_size=(640, 640), aug=None):
+def data_augmentation(input_image, target_img, output_mask, img_input_size=(640, 640), img_output_size=(640, 640), aug=None):
 
     image = TF.resize(input_image, size=img_output_size)
+    target_image = TF.resize(target_img, size=img_output_size) if target_img is not None else None
     mask = TF.resize(output_mask, size=img_output_size) if output_mask is not None and np.any(
         np.unique(pil_to_np(output_mask) > 0)) else None
 
@@ -84,6 +86,17 @@ def data_augmentation(input_image, output_mask, img_input_size=(640, 640), img_o
             mask = Image.fromarray(augmented['mask'])
             used_augmentations.append("optical_distortion")
 
+        # Color transfer augmentation
+        if "color_transfer" in aug and target_image is not None and (len(aug) < 2 or random.random() > 0.5):
+            
+            original_img_lab = TF.to_tensor(image).permute(1, 2, 0).numpy()
+            target_img_lab = TF.to_tensor(target_image).permute(1, 2, 0).numpy()
+
+            _, _, augmented_img = transfer_color(original_img_lab, target_img_lab)
+            image = transforms.ToPILImage()(torch.from_numpy(augmented_img).permute(2, 0, 1))
+            used_augmentations.append("color_transfer")
+
+
     # Transform to grayscale (1 channel)
     mask = TF.to_grayscale(mask, num_output_channels=1) if mask is not None else None
 
@@ -94,7 +107,7 @@ def data_augmentation(input_image, output_mask, img_input_size=(640, 640), img_o
     mask = torch.zeros(img_output_size) if mask is None or not np.any(unique_mask_values) else (
         torch.ones(img_output_size) if np.any(unique_mask_values) and unique_mask_values.size == 1 else TF.to_tensor(
             np_to_pil(basic_threshold(np_img=pil_to_np(mask)))).squeeze(0).float())
-
+    
     return image, mask, used_augmentations
 
 

@@ -110,7 +110,8 @@ def train_model_with_validation(dataloaders,
                                 batch_size=1,
                                 use_cuda=True,
                                 output_dir="../../models",
-                                augmentation_strategy="random"):
+                                augmentation_strategy="random",
+                                augmentation_operations=[None]):
 
     # Checking for GPU availability
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu") if use_cuda else "cpu"
@@ -120,7 +121,8 @@ def train_model_with_validation(dataloaders,
     if model is None:
         model = UNet(in_channels=3, out_channels=1, padding=True, img_input_size=patch_size).to(device)
 
-    with open("../../datasets/OCDC/training/training_accuracy_loss.csv", mode='a+') as csv_file:
+    augmentation = augmentation_strategy if augmentation_strategy in ["no_augmentation", "color_augmentation"] else "{}_{}_operations".format(augmentation_strategy, len(augmentation_operations)-1)
+    with open("../../datasets/OCDC/training/ocdc_training_accuracy_loss.csv", mode='a+') as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer.writerow(['model', 'augmentation', 'phase', 'epoch', 'loss', 'accuracy', 'date'])
 
@@ -140,8 +142,9 @@ def train_model_with_validation(dataloaders,
 
         logger.info("")
         logger.info("-" * 20)
-        logger.info('Epoch {}/{} ({:.0f}m {:.0f}s) {}'.format(epoch, n_epochs, time_elapsed // 60, time_elapsed % 60,
-                                                              datetime.datetime.now()))
+        logger.info('Epoch {}/{} {} ({:.0f}m {:.0f}s) {}'.format(epoch, n_epochs, augmentation, time_elapsed // 60,
+                                                                 time_elapsed % 60,
+                                                                 datetime.datetime.now()))
         logger.info("-" * 20)
 
         # Each epoch has a training and validation phase
@@ -199,7 +202,7 @@ def train_model_with_validation(dataloaders,
 
         # save the model - each epoch
         # if epoch_loss[phase] < best_loss or epoch_acc[phase] > best_acc:
-        filename = save_model(output_dir, model, patch_size, epoch, qtd_images , batch_size, augmentation_strategy, optimizer, loss)
+        filename = save_model(output_dir, model, patch_size, epoch, qtd_images , batch_size, augmentation, optimizer, loss)
 
         if epoch_loss[phase] < best_loss:
             best_loss = epoch_loss[phase]
@@ -208,18 +211,18 @@ def train_model_with_validation(dataloaders,
 
         logger.info("-" * 20)
 
-        with open("../../datasets/OCDC/training/training_accuracy_loss.csv", mode='a+') as csv_file:
+        with open("../../datasets/OCDC/training/ocdc_training_accuracy_loss.csv", mode='a+') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             for phase in ['train', 'test']:
                 print('[{}] Loss: {:.6f}'.format(phase, epoch_loss[phase]))
-                csv_writer.writerow([filename, augmentation_strategy, phase, epoch, epoch_loss[phase], epoch_acc[phase], datetime.datetime.now()])
+                csv_writer.writerow([filename, augmentation, phase, epoch, epoch_loss[phase], epoch_acc[phase], datetime.datetime.now()])
 
     time_elapsed = time.time() - since
     logger.info('-' * 20)
     logger.info('{:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
     logger.info('Best accuracy: {}'.format(best_acc))
 
-    save_model(output_dir, model, patch_size, epoch, qtd_images, batch_size, augmentation_strategy, optimizer, loss)
+    save_model(output_dir, model, patch_size, epoch, qtd_images, batch_size, augmentation, optimizer, loss)
 
 
 def save_model(model_dir, model, patch_size, epoch, imgs, batch_size, augmentation_strategy, optimizer, loss):
@@ -255,8 +258,17 @@ if __name__ == '__main__':
     # model_dir = "../../models"
     model_dir = "/media/dalifreire/CCB60537B6052394/Users/Dali/Downloads/models"
 
-    augmentation_strategy = "no_augmentation" # "no_augmentation", "one_by_epoch", #"random",
-    augmentation = [None] #[None, "horizontal_flip", "vertical_flip", "rotation", "transpose", "elastic_transformation", "grid_distortion", "optical_distortion"]
+    augmentation_strategy = "one_by_epoch" # "no_augmentation", "color_augmentation", "one_by_epoch", "random"
+    augmentation = [None,
+                    "horizontal_flip",
+                    "vertical_flip",
+                    "rotation",
+                    "transpose",
+                    "elastic_transformation",
+                    "grid_distortion",
+                    "optical_distortion",
+                    "color_transfer"]
+    #[None, "horizontal_flip", "vertical_flip", "rotation", "transpose", "elastic_transformation", "grid_distortion", "optical_distortion", "color_transfer"]
 
     batch_size = 1
     patch_size = (640, 640)
@@ -274,9 +286,9 @@ if __name__ == '__main__':
                                     validation_split=0.0)
 
     # loads our u-net based model to continue previous training
-    # trained_model_version = "OCDC__Size-640x640_Epoch-102_Images-840_Batch-1__no_augmentation"
-    # trained_model_path = "{}/{}.pth".format(model_dir, trained_model_version)
-    # model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
+    #trained_model_version = "OCDC__Size-640x640_Epoch-382_Images-840_Batch-1__one_by_epoch_8_operations" # "OCDC__Size-640x640_Epoch-1_Images-840_Batch-1__no_augmentation"
+    #trained_model_path = "{}/{}.pth".format(model_dir, trained_model_version)
+    #model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
 
     # starts the training from scratch
     model = None
@@ -284,6 +296,7 @@ if __name__ == '__main__':
     # train the model
     train_model_with_validation(dataloaders=dataloaders,
                                 model=model,
-                                n_epochs=500,
+                                n_epochs=400,
                                 augmentation_strategy=augmentation_strategy,
-                                output_dir=model_dir)
+                                output_dir=model_dir,
+                                augmentation_operations=augmentation)
