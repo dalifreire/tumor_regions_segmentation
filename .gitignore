@@ -10,3 +10,6 @@ __pycache__
 /datasets/
 /models/
 .vscode/settings.json
+/sourcecode/GAN/checkpoints/**/results*/**
+/sourcecode/GAN/checkpoints/**/*.log
+/sourcecode/GAN/checkpoints/**/events.*

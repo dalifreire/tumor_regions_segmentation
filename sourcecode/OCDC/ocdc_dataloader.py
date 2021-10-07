@@ -50,6 +50,7 @@ class ORCADataset(Dataset):
     def transform(self, image, mask, fname):
 
         target_img = None
+        GAN_model = None
 
         if fname in self.used_images:
             self.epoch += 1
@@ -57,6 +58,7 @@ class ORCADataset(Dataset):
         self.used_images.add(fname)
 
         augmentation_operations = []
+        
         if self.augmentation_strategy == "no_augmentation" or self.epoch == 1:
 
             augmentation_operations = None
@@ -64,6 +66,10 @@ class ORCADataset(Dataset):
         elif 'color_augmentation' in self.augmentation_strategy:
             
             augmentation_operations.append("color_transfer")
+
+        elif 'inpainting_augmentation' in self.augmentation_strategy:
+
+            augmentation_operations.append("inpainting")
 
         elif 'random' in self.augmentation_strategy:
 
@@ -81,13 +87,29 @@ class ORCADataset(Dataset):
             path_img_target, path_mask_target, fname_target = self.samples[target_img_idx-1]
             target_img = load_pil_image(path_img_target, False, self.color_model)
 
+        if self.epoch > 1 and 'inpainting' in augmentation_operations:
+
+            # Prepares the GAN model            
+            sourcecode_dir = os.path.dirname(os.path.abspath('.'))
+            config_file = os.path.join(sourcecode_dir, 'GAN/configs/config_imagenet_ocdc.yaml')
+            config = get_config(config_file)
+            checkpoint_path = os.path.join(sourcecode_dir, 'GAN/checkpoints', config['dataset_name'], config['mask_type'] + '_' + config['expname'])
+
+            cuda = config['cuda'] and torch.cuda.is_available()
+            device_ids = config['gpu_ids']
+            GAN_model = Generator(config['netG'], cuda, device_ids)
+            last_model_name = get_model_list(checkpoint_path, "gen", iteration=436800)
+            
+            checkpoint = torch.load(last_model_name) if torch.cuda.is_available() else torch.load(last_model_name, map_location=lambda storage, loc: storage)
+            GAN_model.load_state_dict(checkpoint)
+
         if len(self.used_images) <= 1:
             logger.info("Epoch: '{}' augmentation {} {}".format(self.epoch, self.augmentation_strategy,
                                                                 augmentation_operations))
-
+        
         #x, y = data_augmentation(image, mask, self.img_input_size, self.img_output_size, should_augment)
         #x, y = data_augmentation(image, mask, self.img_input_size, self.img_output_size, False)
-        x, y, used_augmentations = data_augmentation(image, target_img, mask, self.img_input_size, self.img_output_size, augmentation_operations)
+        x, y, used_augmentations = data_augmentation(image, target_img, mask, self.img_input_size, self.img_output_size, augmentation_operations, GAN_model)
         return x, y, fname, image.size
 
 
@@ -144,7 +166,7 @@ def create_dataloader(tile_size="640x640",
 
     if augmentation is None:
         augmentation = [None, "horizontal_flip", "vertical_flip", "rotation", "transpose", "elastic_transformation",
-                        "grid_distortion", "optical_distortion"]
+                        "grid_distortion", "optical_distortion", "color_transfer", "inpainting"]
 
     image_datasets = {x: ORCADataset(img_dir=dataset_dir,
                                      img_input_size=img_input_size, img_output_size=img_output_size,
