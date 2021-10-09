@@ -11,5 +11,7 @@ __pycache__
 /models/
 .vscode/settings.json
 /sourcecode/GAN/checkpoints/**/results*/**
-/sourcecode/GAN/checkpoints/**/*.log
 /sourcecode/GAN/checkpoints/**/events.*
+/sourcecode/GAN/checkpoints/**/*.log
+/sourcecode/GAN/checkpoints/**/*.pt
+/sourcecode/GAN/checkpoints/**/*.png

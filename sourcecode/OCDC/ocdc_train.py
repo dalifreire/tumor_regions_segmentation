@@ -121,7 +121,7 @@ def train_model_with_validation(dataloaders,
     if model is None:
         model = UNet(in_channels=3, out_channels=1, padding=True, img_input_size=patch_size).to(device)
 
-    augmentation = augmentation_strategy if augmentation_strategy in ["no_augmentation", "color_augmentation"] else "{}_{}_operations".format(augmentation_strategy, len(augmentation_operations)-1)
+    augmentation = augmentation_strategy if augmentation_strategy in ["no_augmentation", "color_augmentation", "inpainting_augmentation"] else "{}_{}_operations".format(augmentation_strategy, len(augmentation_operations)-1)
     with open("../../datasets/OCDC/training/ocdc_training_accuracy_loss.csv", mode='a+') as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer.writerow(['model', 'augmentation', 'phase', 'epoch', 'loss', 'accuracy', 'date'])
@@ -267,8 +267,9 @@ if __name__ == '__main__':
                     "elastic_transformation",
                     "grid_distortion",
                     "optical_distortion",
-                    "color_transfer"]
-    #[None, "horizontal_flip", "vertical_flip", "rotation", "transpose", "elastic_transformation", "grid_distortion", "optical_distortion", "color_transfer"]
+                    "color_transfer",
+                    "inpainting"]
+    #[None, "horizontal_flip", "vertical_flip", "rotation", "transpose", "elastic_transformation", "grid_distortion", "optical_distortion", "color_transfer", "inpainting_augmentation"]
 
     batch_size = 1
     patch_size = (640, 640)
@@ -286,9 +287,9 @@ if __name__ == '__main__':
                                     validation_split=0.0)
 
     # loads our u-net based model to continue previous training
-    #trained_model_version = "OCDC__Size-640x640_Epoch-382_Images-840_Batch-1__one_by_epoch_8_operations" # "OCDC__Size-640x640_Epoch-1_Images-840_Batch-1__no_augmentation"
-    #trained_model_path = "{}/{}.pth".format(model_dir, trained_model_version)
-    #model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
+    trained_model_version = "OCDC__Size-640x640_Epoch-1_Images-840_Batch-1__no_augmentation"
+    trained_model_path = "{}/{}.pth".format(model_dir, trained_model_version)
+    model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
 
     # starts the training from scratch
     # model = None

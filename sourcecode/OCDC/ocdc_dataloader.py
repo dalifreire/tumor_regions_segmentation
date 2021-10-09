@@ -98,7 +98,7 @@ class ORCADataset(Dataset):
             cuda = config['cuda'] and torch.cuda.is_available()
             device_ids = config['gpu_ids']
             GAN_model = Generator(config['netG'], cuda, device_ids)
-            last_model_name = get_model_list(checkpoint_path, "gen", iteration=436800)
+            last_model_name = get_model_list(checkpoint_path, "gen", iteration=430000)
             
             checkpoint = torch.load(last_model_name) if torch.cuda.is_available() else torch.load(last_model_name, map_location=lambda storage, loc: storage)
             GAN_model.load_state_dict(checkpoint)
