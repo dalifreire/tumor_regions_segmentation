@@ -81,13 +81,14 @@ class ORCADataset(Dataset):
             idx = (self.epoch-1) % len(self.augmentation)
             augmentation_operations.append(self.augmentation[idx])
 
-        if self.epoch > 1 and 'color_transfer' in augmentation_operations:
+
+        if self.epoch > 1 and augmentation_operations is not None and 'color_transfer' in augmentation_operations:
 
             target_img_idx = random.randrange(len(self.samples))
             path_img_target, path_mask_target, fname_target = self.samples[target_img_idx-1]
             target_img = load_pil_image(path_img_target, False, self.color_model)
 
-        if self.epoch > 1 and 'inpainting' in augmentation_operations:
+        if self.epoch > 1 and augmentation_operations is not None and 'inpainting' in augmentation_operations:
 
             # Prepares the GAN model            
             sourcecode_dir = os.path.dirname(os.path.abspath('.'))
