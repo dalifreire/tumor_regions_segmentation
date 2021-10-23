@@ -135,7 +135,7 @@ def train_model_with_validation(dataloaders,
 
     since = time.time()
     qtd_images = 0
-    start_epoch = 352
+    start_epoch = 2
     for epoch in range(start_epoch, n_epochs + 1):
 
         time_elapsed = time.time() - since
@@ -258,7 +258,7 @@ if __name__ == '__main__':
     # model_dir = "../../models"
     model_dir = "/media/dalifreire/CCB60537B6052394/Users/Dali/Downloads/models"
 
-    augmentation_strategy = "inpainting_augmentation" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "one_by_epoch", "random"
+    augmentation_strategy = "one_by_epoch" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "one_by_epoch", "random"
     augmentation = [None,
                     "horizontal_flip",
                     "vertical_flip",
@@ -283,11 +283,11 @@ if __name__ == '__main__':
                                     color_model=color_model,
                                     augmentation=augmentation,
                                     augmentation_strategy=augmentation_strategy,
-                                    start_epoch=352,
+                                    start_epoch=2,
                                     validation_split=0.0)
 
     # loads our u-net based model to continue previous training
-    trained_model_version = "OCDC__Size-640x640_Epoch-351_Images-840_Batch-1__inpainting_augmentation"
+    trained_model_version = "OCDC__Size-640x640_Epoch-1_Images-840_Batch-1__no_augmentation"
     trained_model_path = "{}/{}.pth".format(model_dir, trained_model_version)
     model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
 
