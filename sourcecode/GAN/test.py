@@ -2,7 +2,11 @@ import os
 import random
 import time
 import shutil
-from argparse import ArgumentParser
+import sys
+
+current_path = os.path.abspath('.')
+root_path = os.path.dirname(os.path.dirname(current_path))
+sys.path.append(root_path)
 
 import torch
 import torch.nn as nn
@@ -12,11 +16,11 @@ import torchvision.utils as vutils
 from tensorboardX import SummaryWriter
 #from torch.utils.tensorboard import SummaryWriter
 
+from argparse import ArgumentParser
 from trainer import Trainer
 from data.dataset import Dataset
 from utils.tools import get_config, random_bbox, mask_image, get_model_list
 from utils.logger import get_logger
-
 from model.networks import Generator
 
 parser = ArgumentParser()
