@@ -74,7 +74,8 @@ class ORCADataset(Dataset):
         elif 'random' in self.augmentation_strategy:
 
             augmentation_operations = self.augmentation.copy()
-            augmentation_operations.remove(None)
+            if None in augmentation_operations:
+                augmentation_operations.remove(None)
 
         elif 'one_by_epoch' in self.augmentation_strategy:
 
