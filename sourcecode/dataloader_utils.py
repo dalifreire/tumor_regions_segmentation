@@ -1,11 +1,22 @@
+import os
+import sys
 import torch
+import torch.nn as nn
+import torchvision.utils as vutils
 import torchvision.transforms.functional as TF
 
 import random
 import matplotlib.pyplot as plt
 
+current_path = os.path.abspath('.')
+root_path = os.path.dirname(os.path.dirname(current_path))
+sys.path.append(root_path)
+
 from sourcecode.wsi_image_utils import *
 from sourcecode.logger_utils import *
+from sourcecode.GAN.model.networks import Generator
+from sourcecode.GAN.utils.tools import get_config, random_bbox, mask_image, is_image_file, default_loader, normalize, get_model_list
+
 from torchvision import transforms
 
 from albumentations import (
@@ -21,7 +32,7 @@ def is_valid_file(filename, extensions=('.jpg', '.bmp', '.tif', '.png')):
     return str(filename).lower().endswith(extensions)
 
 
-def data_augmentation(input_image, target_img, output_mask, img_input_size=(640, 640), img_output_size=(640, 640), aug=None):
+def data_augmentation(input_image, target_img, output_mask, img_input_size=(640, 640), img_output_size=(640, 640), aug=None, GAN_model=None):
 
     image = TF.resize(input_image, size=img_output_size)
     target_image = TF.resize(target_img, size=img_output_size) if target_img is not None else None
@@ -96,6 +107,51 @@ def data_augmentation(input_image, target_img, output_mask, img_input_size=(640,
             image = transforms.ToPILImage()(torch.from_numpy(augmented_img).permute(2, 0, 1))
             used_augmentations.append("color_transfer")
 
+        # Inpainting augmentation
+        if "inpainting" in aug and (len(aug) < 2 or random.random() > 0.5):
+            
+            width, height = image.size
+            sourcecode_dir = os.path.dirname(os.path.abspath('.'))
+            config_file = os.path.join(sourcecode_dir, 'GAN/configs/config_imagenet_ocdc.yaml')
+            config = get_config(config_file)
+
+            # Setting the points for cropped image
+            crop_size = config['image_shape']
+            left = np.random.randint(0, width-crop_size[0])
+            top = np.random.randint(0, height-crop_size[1])
+
+            cropped_region = image.crop((left, top, left+crop_size[0], top+crop_size[1]))
+            cropped_region = pil_to_np(cropped_region)
+            cropped_region = lab_to_rgb(cropped_region)
+            cropped_region = transforms.ToTensor()(cropped_region)
+            inpainting_img = cropped_region.detach().clone().mul_(2).add_(-1)        # normalize between -1 and 1
+            inpainting_img = inpainting_img.unsqueeze(dim=0).to(dtype=torch.float32) # adds the batch channel
+            
+            bboxes = random_bbox(config, batch_size=inpainting_img.size(0))
+            inpainting_img, inpainting_mask = mask_image(inpainting_img, bboxes, config)
+
+            if torch.cuda.is_available():
+                GAN_model = nn.parallel.DataParallel(GAN_model)
+                inpainting_img = inpainting_img.cuda()
+                inpainting_mask = inpainting_mask.cuda()
+
+            # Inpainting inference
+            x1, x2, offset_flow = GAN_model(inpainting_img, inpainting_mask)
+            inpainted_result = x2 * inpainting_mask + inpainting_img * (1. - inpainting_mask)
+            inpainted_result = inpainted_result.squeeze(0).add_(1).div_(2) # renormalize between 0 and 1
+            inpainted_result = transforms.ToTensor()(rgb_to_lab(inpainted_result.permute(1, 2, 0).cpu().detach().numpy()))
+            
+            #viz_images = torch.stack([inpainting_img, inpainted_result.unsqueeze(dim=0).cuda()], dim=1)
+            #viz_images = viz_images.view(-1, *list(inpainting_img.size())[1:])
+            #vutils.save_image(viz_images,
+            #                    '/home/dalifreire/Downloads/teste_%03d.png' % (random.randint(0, 999)),
+            #                    nrow=2 * 4,
+            #                    normalize=True)
+            
+            augmented_img = TF.to_tensor(image)
+            augmented_img[:, top:top+crop_size[1], left:left+crop_size[0]] = inpainted_result.squeeze(0)
+            image = transforms.ToPILImage()(augmented_img)
+            used_augmentations.append("inpainting")
 
     # Transform to grayscale (1 channel)
     mask = TF.to_grayscale(mask, num_output_channels=1) if mask is not None else None
@@ -107,7 +163,7 @@ def data_augmentation(input_image, target_img, output_mask, img_input_size=(640,
     mask = torch.zeros(img_output_size) if mask is None or not np.any(unique_mask_values) else (
         torch.ones(img_output_size) if np.any(unique_mask_values) and unique_mask_values.size == 1 else TF.to_tensor(
             np_to_pil(basic_threshold(np_img=pil_to_np(mask)))).squeeze(0).float())
-    
+
     return image, mask, used_augmentations
 
 
