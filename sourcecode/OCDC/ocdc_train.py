@@ -111,7 +111,8 @@ def train_model_with_validation(dataloaders,
                                 use_cuda=True,
                                 output_dir="../../models",
                                 augmentation_strategy="random",
-                                augmentation_operations=[None]):
+                                augmentation_operations=[None],
+                                result_file_csv="../../datasets/OCDC/training/ocdc_training_accuracy_loss.csv"):
 
     # Checking for GPU availability
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu") if use_cuda else "cpu"
@@ -122,9 +123,9 @@ def train_model_with_validation(dataloaders,
         model = UNet(in_channels=3, out_channels=1, padding=True, img_input_size=patch_size).to(device)
 
     augmentation = augmentation_strategy if augmentation_strategy in ["no_augmentation", "color_augmentation", "inpainting_augmentation"] else "{}_{}_operations".format(augmentation_strategy, len(augmentation_operations)-1)
-    with open("../../datasets/OCDC/training/ocdc_training_accuracy_loss.csv", mode='a+') as csv_file:
+    with open(result_file_csv, mode='a+') as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        csv_writer.writerow(['model', 'augmentation', 'phase', 'epoch', 'loss', 'accuracy', 'date'])
+        csv_writer.writerow(['model', 'augmentation', 'phase', 'epoch', 'loss', 'accuracy', 'date', 'transformations'])
 
     criterion = nn.BCELoss().to(device)
     optimizer = optim.Adam(model.parameters())
@@ -211,11 +212,11 @@ def train_model_with_validation(dataloaders,
 
         logger.info("-" * 20)
 
-        with open("../../datasets/OCDC/training/ocdc_training_accuracy_loss.csv", mode='a+') as csv_file:
+        with open(result_file_csv, mode='a+') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             for phase in ['train', 'test']:
                 print('[{}] Loss: {:.6f}'.format(phase, epoch_loss[phase]))
-                csv_writer.writerow([filename, augmentation, phase, epoch, epoch_loss[phase], epoch_acc[phase], datetime.datetime.now()])
+                csv_writer.writerow([filename, augmentation, phase, epoch, epoch_loss[phase], epoch_acc[phase], datetime.datetime.now(), augmentation_operations])
 
     time_elapsed = time.time() - since
     logger.info('-' * 20)
@@ -258,17 +259,14 @@ if __name__ == '__main__':
     # model_dir = "../../models"
     model_dir = "/media/dalifreire/CCB60537B6052394/Users/Dali/Downloads/models"
 
-    augmentation_strategy = "one_by_epoch" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "one_by_epoch", "random"
+    augmentation_strategy = "random" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
     augmentation = [None,
                     "horizontal_flip",
                     "vertical_flip",
                     "rotation",
                     "transpose",
-                    "elastic_transformation",
                     "grid_distortion",
-                    "optical_distortion",
-                    "color_transfer",
-                    "inpainting"]
+                    "optical_distortion"]
     #[None, "horizontal_flip", "vertical_flip", "rotation", "transpose", "elastic_transformation", "grid_distortion", "optical_distortion", "color_transfer", "inpainting"]
 
     batch_size = 1
@@ -295,9 +293,11 @@ if __name__ == '__main__':
     # model = None
 
     # train the model
+    result_file_csv = "../../datasets/OCDC/training/ocdc_training_accuracy_loss.csv"
     train_model_with_validation(dataloaders=dataloaders,
                                 model=model,
                                 n_epochs=400,
                                 augmentation_strategy=augmentation_strategy,
                                 output_dir=model_dir,
-                                augmentation_operations=augmentation)
+                                augmentation_operations=augmentation,
+                                result_file_csv=result_file_csv)

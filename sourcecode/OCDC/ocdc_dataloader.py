@@ -77,10 +77,14 @@ class ORCADataset(Dataset):
             if None in augmentation_operations:
                 augmentation_operations.remove(None)
 
-        elif 'one_by_epoch' in self.augmentation_strategy:
+        elif 'standard' in self.augmentation_strategy:
 
-            idx = (self.epoch-1) % len(self.augmentation)
-            augmentation_operations.append(self.augmentation[idx])
+            augmentations = self.augmentation.copy()
+            if None in augmentations:
+                augmentations.remove(None)
+
+            idx = (self.epoch-2) % len(augmentations)
+            augmentation_operations.append(augmentations[idx])
 
 
         if self.epoch > 1 and augmentation_operations is not None and 'color_transfer' in augmentation_operations:
