@@ -187,10 +187,10 @@ def draw_tile_border(draw, r_s, r_e, c_s, c_e, color=GREEN_COLOR, border_size=1,
     for x in range(0, border_size):
         draw.rectangle([(c_s + x, r_s + x), (c_e - 1 - x, r_e - 1 - x)], outline=color)
 
-    if text is not None:
-        font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeMono.ttf", 15)
-        (x, y) = draw.textsize(text, font)
-        draw.text((c_s + 5, r_s + 5), text, (255, 255, 255), font=font)
+    #if text is not None:
+    #    font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeMono.ttf", 15)
+    #    (x, y) = draw.textsize(text, font)
+    #    draw.text((c_s + 5, r_s + 5), text, (255, 255, 255), font=font)
 
 
 def draw_heat_grid(np_processed_img, tile_size):
