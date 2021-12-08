@@ -216,7 +216,7 @@ def train_model_with_validation(dataloaders,
             csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             for phase in ['train', 'test']:
                 print('[{}] Loss: {:.6f}'.format(phase, epoch_loss[phase]))
-                csv_writer.writerow([filename, augmentation, phase, epoch, epoch_loss[phase], epoch_acc[phase], datetime.datetime.now(), augmentation_operations])
+                csv_writer.writerow([filename, augmentation, phase, epoch, epoch_loss[phase], epoch_acc[phase], datetime.datetime.now(), str(augmentation_operations).replace(",", "")])
 
     time_elapsed = time.time() - since
     logger.info('-' * 20)
