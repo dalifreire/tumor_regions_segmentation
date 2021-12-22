@@ -13,7 +13,7 @@ from sklearn.model_selection import train_test_split
 import os.path
 
 
-class ORCADataset(Dataset):
+class OCDCDataset(Dataset):
 
     def __init__(self,
                  img_dir="../../datasets/OCDC",
@@ -163,7 +163,7 @@ def create_dataloader(tile_size="640x640",
                       shuffle=False,
                       img_input_size=(640, 640),
                       img_output_size=(640, 640),
-                      dataset_dir="../../datasets/ORCA",
+                      dataset_dir="../../datasets/OCDC",
                       color_model="LAB",
                       augmentation=None,
                       augmentation_strategy="random",
@@ -174,7 +174,7 @@ def create_dataloader(tile_size="640x640",
         augmentation = [None, "horizontal_flip", "vertical_flip", "rotation", "transpose", "elastic_transformation",
                         "grid_distortion", "optical_distortion", "color_transfer", "inpainting"]
 
-    image_datasets = {x: ORCADataset(img_dir=dataset_dir,
+    image_datasets = {x: OCDCDataset(img_dir=dataset_dir,
                                      img_input_size=img_input_size, img_output_size=img_output_size,
                                      dataset_type='testing' if x == 'test' else 'training',
                                      augmentation=augmentation,
