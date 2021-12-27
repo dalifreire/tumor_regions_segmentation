@@ -15,94 +15,6 @@ from sourcecode.OCDC.ocdc_dataloader import *
 from sourcecode.unet_model import *
 
 
-def train_model(dataloaders,
-                model=None,
-                patch_size=(640, 640),
-                n_epochs=500,
-                batch_size=1,
-                use_cuda=True,
-                output_dir="../../models"):
-
-    # Checking for GPU availability
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu") if use_cuda else "cpu"
-    logger.info('Runing on: {}'.format(device))
-
-    torch.cuda.empty_cache()
-    if model is None:
-        model = UNet(in_channels=3, out_channels=1, padding=True, img_input_size=patch_size).to(device)
-
-    model.train()
-    criterion = nn.BCELoss().to(device)
-    optimizer = optim.Adam(model.parameters())
-    optimizer.zero_grad()
-
-    since = time.time()
-    qtd_images = 0
-    start_epoch = 1
-    dataset_train_size = len(dataloaders['train'].dataset)
-    for epoch in range(start_epoch, n_epochs + 1):
-
-        time_elapsed = time.time() - since
-
-        logger.info("")
-        logger.info('Epoch {}/{} ({:.0f}m {:.0f}s) {}'.format(epoch, n_epochs, time_elapsed // 60, time_elapsed % 60,
-                                                              datetime.datetime.now()))
-        logger.info("-" * 20)
-
-        for batch_idx, (data, target, fname, original_size) in enumerate(dataloaders['train']):
-
-            logger.info("\tfname: '{}' {}".format(fname[0], (batch_idx + 1)))
-
-            data = Variable(data.to(device))
-            target = Variable(target.to(device)).unsqueeze(1)
-            # target = Variable(target.to(device))
-            # print('X     --> {}'.format(data.size()))
-            # print('y     --> {}'.format(target.size()))
-            # print('          {}'.format(target))
-
-            optimizer.zero_grad()
-            output = model(data)
-            # output = model(data).squeeze(0)
-            # print('y_hat --> {}'.format(output.size()))
-            # print('          {}'.format(output))
-
-            loss = criterion(output, target)
-            loss.backward()
-            optimizer.step()
-            torch.cuda.empty_cache()
-            # break
-
-            qtd_images = (batch_idx + 1) * len(data)
-            if batch_idx == 0 or ((batch_idx + 1) % (dataset_train_size / 20) == 0):
-                logger.info('\tBatch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                    (batch_idx + 1),
-                    qtd_images,
-                    dataset_train_size,
-                    100. * (((batch_idx + 1) * len(data)) / dataset_train_size),
-                    loss.item()))
-
-            #if qtd_images % 500 == 0:
-            #    save_model(output_dir, model, patch_size, epoch, qtd_images , batch_size, optimizer, loss)
-
-            if loss.item() < 0.0000001 or math.isnan(loss.item()):
-                logger.warn("\tBatch: {} (too little loss: {:.15f})".format((batch_idx + 1), loss.item()))
-                break
-
-        # save the model - each epoch
-        save_model(output_dir, model, patch_size, epoch, qtd_images , batch_size, optimizer, loss)
-
-        # print("\tLoss: {:.6f}".format(loss.item()))
-        if loss.item() < 0.0000001 or math.isnan(loss.item()):
-            logger.warn("\tEpoch: {} (too little loss: {:.15f})".format(epoch, loss.item()))
-            break
-
-    time_elapsed = time.time() - since
-    logger.info('-' * 20)
-    logger.info('{:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
-
-    save_model(output_dir, model, patch_size, epoch, qtd_images, batch_size, optimizer, loss)
-
-
 def train_model_with_validation(dataloaders,
                                 model=None,
                                 patch_size=(640, 640),
@@ -230,7 +142,7 @@ def save_model(model_dir, model, patch_size, epoch, imgs, batch_size, augmentati
     """
     Save the trained model
     """
-    filename = 'OCDC__Size-{}x{}_Epoch-{}_Images-{}_Batch-{}__{}.pth'.format(patch_size[0], patch_size[1], epoch, imgs, batch_size, augmentation_strategy)
+    filename = 'OCDC__Size-{}x{}_Epoch-{}_Images-{}_Batch-{}__{}_all.pth'.format(patch_size[0], patch_size[1], epoch, imgs, batch_size, augmentation_strategy)
     logger.info("Saving the model: '{}'".format(filename))
 
     filepath = os.path.join(model_dir, filename) if model_dir is not None else filename
@@ -259,14 +171,17 @@ if __name__ == '__main__':
     # model_dir = "../../models"
     model_dir = "/media/dalifreire/CCB60537B6052394/Users/Dali/Downloads/models"
 
-    augmentation_strategy = "random" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
+    augmentation_strategy = "standard" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
     augmentation = [None,
-                    "horizontal_flip",
-                    "vertical_flip",
-                    "rotation",
-                    "transpose",
-                    "grid_distortion",
-                    "optical_distortion"]
+                    "horizontal_flip", 
+                    "vertical_flip", 
+                    "rotation", 
+                    "transpose", 
+                    "elastic_transformation", 
+                    "grid_distortion", 
+                    "optical_distortion", 
+                    "color_transfer", 
+                    "inpainting"]
     #[None, "horizontal_flip", "vertical_flip", "rotation", "transpose", "elastic_transformation", "grid_distortion", "optical_distortion", "color_transfer", "inpainting"]
 
     batch_size = 1
@@ -293,7 +208,7 @@ if __name__ == '__main__':
     # model = None
 
     # train the model
-    result_file_csv = "../../datasets/OCDC/training/ocdc_training_accuracy_loss.csv"
+    result_file_csv = "../../datasets/OCDC/training/ocdc_training_accuracy_loss_all.csv"
     train_model_with_validation(dataloaders=dataloaders,
                                 model=model,
                                 n_epochs=400,

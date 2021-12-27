@@ -20,3 +20,4 @@ __pycache__
 /sourcecode/GAN/checkpoints/**/*.pt
 /sourcecode/GAN/checkpoints/**/*.png
 /sourcecode/GAN/examples/**
+**.amlignore*
