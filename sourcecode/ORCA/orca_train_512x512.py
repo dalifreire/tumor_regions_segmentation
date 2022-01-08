@@ -179,8 +179,6 @@ if __name__ == '__main__':
     dataloaders = create_dataloader(tile_size="{}x{}".format(patch_size[0], patch_size[1]),
                                     batch_size=batch_size,
                                     shuffle=False,
-                                    img_input_size=patch_size,
-                                    img_output_size=patch_size,
                                     dataset_dir=dataset_dir,
                                     color_model=color_model,
                                     augmentation=augmentation,
