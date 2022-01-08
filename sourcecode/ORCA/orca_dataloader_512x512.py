@@ -120,7 +120,7 @@ class ORCADataset512x512(ORCADataset):
         return x, y, fname, image.size
 
 
-def load_dataset(img_dir, img_input_size, dataset_type):
+def load_dataset(img_dir, dataset_type):
 
     images = []
     classes = ["tumor"]
