@@ -48,7 +48,7 @@ def train_model_with_validation(dataloaders,
 
     since = time.time()
     qtd_images = 0
-    start_epoch = 1
+    start_epoch = 24
     for epoch in range(start_epoch, n_epochs + 1):
 
         time_elapsed = time.time() - since
@@ -185,16 +185,16 @@ if __name__ == '__main__':
                                     color_model=color_model,
                                     augmentation=augmentation,
                                     augmentation_strategy=augmentation_strategy,
-                                    start_epoch=1,
+                                    start_epoch=24,
                                     validation_split=0.0)
 
     # loads our u-net based model to continue previous training
-    #trained_model_version = "ORCA_512x512__Size-640x640_Epoch-41_Images-4181_Batch-1__no_augmentation"
-    #trained_model_path = "{}/{}.pth".format(model_dir, trained_model_version)
-    #model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
+    trained_model_version = "ORCA_512x512__Size-512x512_Epoch-23_Images-100_Batch-1__no_augmentation"
+    trained_model_path = "{}/{}.pth".format(model_dir, trained_model_version)
+    model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
 
     # starts the training from scratch
-    model = None
+    # model = None
 
     # train the model
     result_file_csv = "../../datasets/ORCA_512x512/training/orca_training_accuracy_loss_noaugmentation.csv"
