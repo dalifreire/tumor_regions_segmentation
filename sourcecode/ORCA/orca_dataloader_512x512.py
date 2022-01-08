@@ -18,12 +18,16 @@ class ORCADataset512x512(ORCADataset):
 
     def __init__(self,
                  img_dir="../../datasets/ORCA_512x512",
+                 img_input_size=(512, 512),
+                 img_output_size=(512, 512),
                  dataset_type="training",
                  augmentation=None,
                  augmentation_strategy="random",
                  color_model="LAB",
                  start_epoch=1):
         self.img_dir = img_dir
+        self.img_input_size = img_input_size
+        self.img_output_size = img_output_size
         self.dataset_type = dataset_type
         self.augmentation = augmentation
         self.augmentation_strategy = augmentation_strategy
@@ -116,7 +120,7 @@ class ORCADataset512x512(ORCADataset):
         return x, y, fname, image.size
 
 
-def load_dataset(img_dir, dataset_type):
+def load_dataset(img_dir, img_input_size, dataset_type):
 
     images = []
     classes = ["tumor"]
@@ -147,6 +151,8 @@ def load_dataset(img_dir, dataset_type):
 def create_dataloader(tile_size="512x512",
                       batch_size=1,
                       shuffle=False,
+                      img_input_size=(512, 512),
+                      img_output_size=(512, 512),
                       dataset_dir="../../datasets/ORCA_512x512",
                       color_model="LAB",
                       augmentation=None,
