@@ -144,7 +144,8 @@ def load_dataset(img_dir, dataset_type):
     return images
 
 
-def create_dataloader(batch_size=1,
+def create_dataloader(tile_size="512x512",
+                      batch_size=1,
                       shuffle=False,
                       dataset_dir="../../datasets/ORCA_512x512",
                       color_model="LAB",
@@ -188,9 +189,9 @@ def create_dataloader(batch_size=1,
         del dataloaders['valid']
         del dataset_sizes['valid']
 
-    logger.info("Train images: {} augmentation: {}".format(dataset_sizes['train'], augmentation_strategy))
+    logger.info("Train images ({}): {} augmentation: {}".format(tile_size, dataset_sizes['train'], augmentation_strategy))
     if validation_split > 0:
-        logger.info("Valid images: {} augmentation: {}".format(dataset_sizes['valid'], 'no_augmentation'))
-    logger.info("Test images: {} augmentation: {}".format(dataset_sizes['test'], 'no_augmentation'))
+        logger.info("Valid images ({}): {} augmentation: {}".format(tile_size, dataset_sizes['valid'], 'no_augmentation'))
+    logger.info("Test images ({}): {} augmentation: {}".format(tile_size, dataset_sizes['test'], 'no_augmentation'))
 
     return dataloaders
