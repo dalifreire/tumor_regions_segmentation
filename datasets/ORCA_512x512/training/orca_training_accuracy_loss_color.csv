@@ -1,4 +1,6 @@
 model,augmentation,phase,epoch,loss,accuracy,date,transformations
+ORCA_512x512__Size-512x512_Epoch-1_Images-100_Batch-1__color_augmentation.pth,color_augmentation,train,1,0.3939175963401794,0.8228012084960937,2022-01-08 00:48:34.240324,[None]
+ORCA_512x512__Size-512x512_Epoch-1_Images-100_Batch-1__color_augmentation.pth,color_augmentation,test,1,0.36211905151605606,0.8289807891845703,2022-01-08 00:48:34.240372,[None]
 ORCA_512x512__Size-512x512_Epoch-2_Images-100_Batch-1__color_augmentation.pth,color_augmentation,train,2,0.36118263483047486,0.8352754211425781,2022-01-09 10:56:29.314501,['color_transfer']
 ORCA_512x512__Size-512x512_Epoch-2_Images-100_Batch-1__color_augmentation.pth,color_augmentation,test,2,0.3703859257698059,0.8213792037963867,2022-01-09 10:56:29.314553,['color_transfer']
 ORCA_512x512__Size-512x512_Epoch-3_Images-100_Batch-1__color_augmentation.pth,color_augmentation,train,3,0.3504576641321182,0.8415730285644532,2022-01-09 10:59:39.508984,['color_transfer']
