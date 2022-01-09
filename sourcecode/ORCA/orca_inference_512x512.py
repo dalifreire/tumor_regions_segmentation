@@ -17,7 +17,7 @@ from scipy import ndimage as nd
 from skimage import measure
 
 dataset_dir = "../../datasets/ORCA_512x512"
-model_dir = "../../models/ORCA_512x512"
+model_dir = "../../models"
 
 batch_size = 1
 patch_size = (512, 512)
