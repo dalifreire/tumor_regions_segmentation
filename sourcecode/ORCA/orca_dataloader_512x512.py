@@ -165,11 +165,12 @@ def create_dataloader(tile_size="512x512",
                         "grid_distortion", "optical_distortion", "color_transfer", "inpainting"]
 
     image_datasets = {x: ORCADataset512x512(img_dir=dataset_dir,
-                                             dataset_type='testing' if x == 'test' else 'training',
-                                             augmentation=augmentation,
-                                             augmentation_strategy='no_augmentation' if x != 'train' else augmentation_strategy,
-                                             color_model=color_model,
-                                             start_epoch=start_epoch) for x in ['train', 'valid', 'test']}
+                                            img_input_size=img_input_size, img_output_size=img_output_size,
+                                            dataset_type='testing' if x == 'test' else 'training',
+                                            augmentation=augmentation,
+                                            augmentation_strategy='no_augmentation' if x != 'train' else augmentation_strategy,
+                                            color_model=color_model,
+                                            start_epoch=start_epoch) for x in ['train', 'valid', 'test']}
 
     if validation_split > 0:
 
