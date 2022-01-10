@@ -170,7 +170,7 @@ if __name__ == '__main__':
     model_dir = "../../models"
     
     augmentation_strategy = "random" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
-    augmentation = ["horizontal_flip", "vertical_flip", "rotation", "transpose"]
+    augmentation = [None, "horizontal_flip", "vertical_flip", "rotation", "transpose"]
     #[None, "horizontal_flip", "vertical_flip", "rotation", "transpose", "elastic_transformation", "grid_distortion", "optical_distortion", "color_transfer", "inpainting"]
 
     batch_size = 1
