@@ -425,7 +425,6 @@ ORCA_512x512__Size-512x512_Epoch-212_Images-100_Batch-1__color_augmentation.pth,
 ORCA_512x512__Size-512x512_Epoch-212_Images-100_Batch-1__color_augmentation.pth,color_augmentation,test,212,0.6159066109359265,0.83224853515625,2022-01-09 22:00:47.107738,['color_transfer']
 ORCA_512x512__Size-512x512_Epoch-213_Images-100_Batch-1__color_augmentation.pth,color_augmentation,train,213,0.08106135406531394,0.9658166122436523,2022-01-09 22:03:55.793907,['color_transfer']
 ORCA_512x512__Size-512x512_Epoch-213_Images-100_Batch-1__color_augmentation.pth,color_augmentation,test,213,0.595254468023777,0.8380194091796875,2022-01-09 22:03:55.793959,['color_transfer']
-model,augmentation,phase,epoch,loss,accuracy,date,transformations
 ORCA_512x512__Size-512x512_Epoch-214_Images-100_Batch-1__color_augmentation.pth,color_augmentation,train,214,0.08108879348263144,0.9657341766357422,2022-01-09 22:37:30.439874,['color_transfer']
 ORCA_512x512__Size-512x512_Epoch-214_Images-100_Batch-1__color_augmentation.pth,color_augmentation,test,214,0.5841858620941639,0.8367906188964844,2022-01-09 22:37:30.439925,['color_transfer']
 ORCA_512x512__Size-512x512_Epoch-215_Images-100_Batch-1__color_augmentation.pth,color_augmentation,train,215,0.08321534402668476,0.9648247146606446,2022-01-09 22:40:39.249089,['color_transfer']
