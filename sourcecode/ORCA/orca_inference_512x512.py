@@ -41,7 +41,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu") if use_cud
 logger.info('Runing on: {}'.format(device))
 
 # loads our trained fcn model
-trained_model_version = "ORCA_512x512__Size-512x512_Epoch-400_Images-100_Batch-1__no_augmentation"
+trained_model_version = "ORCA_512x512__Size-512x512_Epoch-400_Images-100_Batch-1__color_augmentation"
 trained_model_path="{}/{}".format(model_dir, '{}.pth'.format(trained_model_version))
 model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=use_cuda)
 cont = 0

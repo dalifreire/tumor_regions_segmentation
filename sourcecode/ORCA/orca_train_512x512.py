@@ -48,7 +48,7 @@ def train_model_with_validation(dataloaders,
 
     since = time.time()
     qtd_images = 0
-    start_epoch = 373
+    start_epoch = 2
     for epoch in range(start_epoch, n_epochs + 1):
 
         time_elapsed = time.time() - since
@@ -169,8 +169,8 @@ if __name__ == '__main__':
     dataset_dir = "../../datasets/ORCA_512x512"
     model_dir = "../../models"
     
-    augmentation_strategy = "color_augmentation" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
-    augmentation = ["color_transfer"]
+    augmentation_strategy = "inpainting_augmentation" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
+    augmentation = ["inpainting"]
     #[None, "horizontal_flip", "vertical_flip", "rotation", "transpose", "elastic_transformation", "grid_distortion", "optical_distortion", "color_transfer", "inpainting"]
 
     batch_size = 1
@@ -185,11 +185,11 @@ if __name__ == '__main__':
                                     color_model=color_model,
                                     augmentation=augmentation,
                                     augmentation_strategy=augmentation_strategy,
-                                    start_epoch=373,
+                                    start_epoch=2,
                                     validation_split=0.0)
 
     # loads our u-net based model to continue previous training
-    trained_model_version = "ORCA_512x512__Size-512x512_Epoch-372_Images-100_Batch-1__color_augmentation"
+    trained_model_version = "ORCA_512x512__Size-512x512_Epoch-001_Images-100_Batch-1__no_augmentation"
     trained_model_path = "{}/{}.pth".format(model_dir, trained_model_version)
     model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
 
