@@ -189,7 +189,7 @@ if __name__ == '__main__':
                                     validation_split=0.0)
 
     # loads our u-net based model to continue previous training
-    trained_model_version = "ORCA_512x512__Size-512x512_Epoch-395_Images-100_Batch-1__random"
+    trained_model_version = "ORCA_512x512__Size-512x512_Epoch-395_Images-100_Batch-1__random_4_operations_geo"
     trained_model_path = "{}/{}.pth".format(model_dir, trained_model_version)
     model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
 
