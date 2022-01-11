@@ -731,7 +731,6 @@ ORCA_512x512__Size-512x512_Epoch-365_Images-100_Batch-1__random.pth,random_4_ope
 ORCA_512x512__Size-512x512_Epoch-365_Images-100_Batch-1__random.pth,random_4_operations_geo,test,365,0.4391778528690338,0.8653383255004883,2022-01-11 05:51:27.465164,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
 ORCA_512x512__Size-512x512_Epoch-366_Images-100_Batch-1__random.pth,random_4_operations_geo,train,366,0.10173906924203038,0.956646728515625,2022-01-11 05:54:26.705702,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
 ORCA_512x512__Size-512x512_Epoch-366_Images-100_Batch-1__random.pth,random_4_operations_geo,test,366,0.45147231593728065,0.8629769134521484,2022-01-11 05:54:26.705755,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
-model,augmentation,phase,epoch,loss,accuracy,date,transformations
 ORCA_512x512__Size-512x512_Epoch-367_Images-100_Batch-1__random_4_operations_geo.pth,random_4_operations,train,367,0.10492376940324903,0.9552836608886719,2022-01-11 08:58:30.524234,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
 ORCA_512x512__Size-512x512_Epoch-367_Images-100_Batch-1__random_4_operations_geo.pth,random_4_operations,test,367,0.46265267513692376,0.8621481704711914,2022-01-11 08:58:30.524289,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
 ORCA_512x512__Size-512x512_Epoch-368_Images-100_Batch-1__random_4_operations_geo.pth,random_4_operations,train,368,0.10646157087758183,0.9547386169433594,2022-01-11 09:01:29.524022,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
