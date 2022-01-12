@@ -17,8 +17,6 @@ ORCA__Size-640x640_Epoch-8_Images-4181_Batch-1__no_augmentation.pth,no_augmentat
 ORCA__Size-640x640_Epoch-8_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,test,8,0.4215651882832749,0.8119548025473889,2021-12-22 05:52:46.485997,[None]
 ORCA__Size-640x640_Epoch-9_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,train,9,0.3727000308238884,0.8320535578313717,2021-12-22 10:07:02.654653,[None]
 ORCA__Size-640x640_Epoch-9_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,test,9,0.41548844027072956,0.8152722143451158,2021-12-22 10:07:02.654713,[None]
-model,augmentation,phase,epoch,loss,accuracy,date,transformations
-model,augmentation,phase,epoch,loss,accuracy,date,transformations
 ORCA__Size-640x640_Epoch-10_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,train,10,0.3627947420260498,0.8392475131640935,2022-01-01 23:21:08.025229,[None]
 ORCA__Size-640x640_Epoch-10_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,test,10,0.4254318227057437,0.8108762109505756,2022-01-01 23:21:08.025298,[None]
 ORCA__Size-640x640_Epoch-11_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,train,11,0.35695530200736625,0.8424975200544494,2022-01-02 02:24:47.144197,[None]
@@ -27,8 +25,6 @@ ORCA__Size-640x640_Epoch-12_Images-4181_Batch-1__no_augmentation.pth,no_augmenta
 ORCA__Size-640x640_Epoch-12_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,test,12,0.4276782305571576,0.8097452912078421,2022-01-02 05:28:25.957136,[None]
 ORCA__Size-640x640_Epoch-13_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,train,13,0.3523616901585728,0.8458434839620449,2022-01-02 08:32:43.910715,[None]
 ORCA__Size-640x640_Epoch-13_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,test,13,0.42039008540843537,0.8124582928702427,2022-01-02 08:32:43.910766,[None]
-model,augmentation,phase,epoch,loss,accuracy,date,transformations
-model,augmentation,phase,epoch,loss,accuracy,date,transformations
 ORCA__Size-640x640_Epoch-14_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,train,14,0.34199439970425827,0.8515280312677521,2022-01-02 16:43:17.754841,[None]
 ORCA__Size-640x640_Epoch-14_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,test,14,0.43152058739535204,0.8084034379968884,2022-01-02 16:43:17.754893,[None]
 ORCA__Size-640x640_Epoch-15_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,train,15,0.3381378452808798,0.8525752328007301,2022-01-02 19:47:14.394276,[None]
@@ -55,7 +51,6 @@ ORCA__Size-640x640_Epoch-25_Images-4181_Batch-1__no_augmentation.pth,no_augmenta
 ORCA__Size-640x640_Epoch-25_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,test,25,0.4513833299923511,0.8113153954718536,2022-01-04 02:28:06.375325,[None]
 ORCA__Size-640x640_Epoch-26_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,train,26,0.28665639117361896,0.8794482240857108,2022-01-04 05:31:45.104502,[None]
 ORCA__Size-640x640_Epoch-26_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,test,26,0.46460386952732396,0.8076809315765529,2022-01-04 05:31:45.104555,[None]
-model,augmentation,phase,epoch,loss,accuracy,date,transformations
 ORCA__Size-640x640_Epoch-27_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,train,27,0.28522513097758445,0.8801952418446188,2022-01-04 12:12:53.700319,[None]
 ORCA__Size-640x640_Epoch-27_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,test,27,0.4570688426719479,0.8117728074526485,2022-01-04 12:12:53.700371,[None]
 ORCA__Size-640x640_Epoch-28_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,train,28,0.28392729826767826,0.880758856915027,2022-01-04 15:16:30.381375,[None]
@@ -70,7 +65,6 @@ ORCA__Size-640x640_Epoch-32_Images-4181_Batch-1__no_augmentation.pth,no_augmenta
 ORCA__Size-640x640_Epoch-32_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,test,32,0.4419560180835657,0.8176562407378043,2022-01-05 03:32:13.124971,[None]
 ORCA__Size-640x640_Epoch-33_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,train,33,0.2704608067642934,0.8870593469013504,2022-01-05 06:36:59.405200,[None]
 ORCA__Size-640x640_Epoch-33_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,test,33,0.45138384188223807,0.817391382756709,2022-01-05 06:36:59.405251,[None]
-model,augmentation,phase,epoch,loss,accuracy,date,transformations
 ORCA__Size-640x640_Epoch-34_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,train,34,0.27004089650199714,0.8877564632741543,2022-01-05 12:41:38.110873,[None]
 ORCA__Size-640x640_Epoch-34_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,test,34,0.4528644186997638,0.8162341965120092,2022-01-05 12:41:38.110926,[None]
 ORCA__Size-640x640_Epoch-35_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,train,35,0.2665076399487313,0.8883306503752098,2022-01-05 15:45:24.040776,[None]
@@ -85,7 +79,5 @@ ORCA__Size-640x640_Epoch-39_Images-4181_Batch-1__no_augmentation.pth,no_augmenta
 ORCA__Size-640x640_Epoch-39_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,test,39,0.4537590307460404,0.8199419886787616,2022-01-06 04:01:37.659792,[None]
 ORCA__Size-640x640_Epoch-40_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,train,40,0.2530942968383772,0.8948794584130614,2022-01-06 07:05:44.606210,[None]
 ORCA__Size-640x640_Epoch-40_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,test,40,0.4441967368320452,0.8219678404522233,2022-01-06 07:05:44.606262,[None]
-model,augmentation,phase,epoch,loss,accuracy,date,transformations
-model,augmentation,phase,epoch,loss,accuracy,date,transformations
 ORCA__Size-640x640_Epoch-41_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,train,41,0.2528504915444122,0.895784558540501,2022-01-06 23:25:21.202930,[None]
 ORCA__Size-640x640_Epoch-41_Images-4181_Batch-1__no_augmentation.pth,no_augmentation,test,41,0.4356536032761684,0.8207064681084034,2022-01-06 23:25:21.202983,[None]
