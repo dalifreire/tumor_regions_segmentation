@@ -707,7 +707,6 @@ ORCA_512x512__Size-512x512_Epoch-354_Images-100_Batch-1__random_2_operations_dis
 ORCA_512x512__Size-512x512_Epoch-354_Images-100_Batch-1__random_2_operations_distortion.pth,random_2_operations,test,354,0.37835596583783626,0.8674808883666992,2022-01-12 06:17:56.733228,[None 'grid_distortion' 'optical_distortion']
 ORCA_512x512__Size-512x512_Epoch-355_Images-100_Batch-1__random_2_operations_distortion.pth,random_2_operations,train,355,0.14593008257448672,0.9408062744140625,2022-01-12 06:20:55.834445,[None 'grid_distortion' 'optical_distortion']
 ORCA_512x512__Size-512x512_Epoch-355_Images-100_Batch-1__random_2_operations_distortion.pth,random_2_operations,test,355,0.3622227543592453,0.8672534942626953,2022-01-12 06:20:55.834500,[None 'grid_distortion' 'optical_distortion']
-model,augmentation,phase,epoch,loss,accuracy,date,transformations
 ORCA_512x512__Size-512x512_Epoch-356_Images-100_Batch-1__random_2_operations_distortion.pth,random_2_operations,train,356,0.12927011568099261,0.9455757904052734,2022-01-12 09:05:01.976916,[None 'grid_distortion' 'optical_distortion']
 ORCA_512x512__Size-512x512_Epoch-356_Images-100_Batch-1__random_2_operations_distortion.pth,random_2_operations,test,356,0.35321988925337794,0.867561264038086,2022-01-12 09:05:01.976972,[None 'grid_distortion' 'optical_distortion']
 ORCA_512x512__Size-512x512_Epoch-357_Images-100_Batch-1__random_2_operations_distortion.pth,random_2_operations,train,357,0.1259537110105157,0.946502571105957,2022-01-12 09:07:59.880964,[None 'grid_distortion' 'optical_distortion']
