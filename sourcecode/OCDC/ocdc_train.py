@@ -171,7 +171,7 @@ if __name__ == '__main__':
     # model_dir = "../../models"
     model_dir = "/media/dalifreire/CCB60537B6052394/Users/Dali/Downloads/models"
 
-    augmentation_strategy = "standard" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
+    augmentation_strategy = "random" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
     augmentation = [None,
                     "horizontal_flip", 
                     "vertical_flip", 
@@ -200,12 +200,12 @@ if __name__ == '__main__':
                                     validation_split=0.0)
 
     # loads our u-net based model to continue previous training
-    trained_model_version = "OCDC__Size-640x640_Epoch-1_Images-840_Batch-1__no_augmentation"
-    trained_model_path = "{}/{}.pth".format(model_dir, trained_model_version)
-    model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
+    #trained_model_version = "OCDC__Size-640x640_Epoch-1_Images-840_Batch-1__no_augmentation"
+    #trained_model_path = "{}/{}.pth".format(model_dir, trained_model_version)
+    #model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
 
     # starts the training from scratch
-    # model = None
+    model = None
 
     # train the model
     result_file_csv = "../../datasets/OCDC/training/ocdc_training_accuracy_loss_all.csv"

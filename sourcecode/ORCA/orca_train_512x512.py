@@ -48,7 +48,7 @@ def train_model_with_validation(dataloaders,
 
     since = time.time()
     qtd_images = 0
-    start_epoch = 356
+    start_epoch = 2
     for epoch in range(start_epoch, n_epochs + 1):
 
         time_elapsed = time.time() - since
@@ -114,8 +114,8 @@ def train_model_with_validation(dataloaders,
             epoch_acc[phase] = running_accuracy / len(dataloaders[phase].dataset)
 
         # save the model - each epoch
-        #if epoch == 1 or epoch_loss[phase] < best_loss or epoch_acc[phase] > best_acc or (epoch % 10 == 0):
-        filename = save_model(output_dir, model, patch_size, epoch, qtd_images , batch_size, augmentation, optimizer, loss)
+        if (epoch % 10 == 0):
+            filename = save_model(output_dir, model, patch_size, epoch, qtd_images , batch_size, augmentation, optimizer, loss)
 
         if epoch_loss[phase] < best_loss:
             best_loss = epoch_loss[phase]
@@ -142,7 +142,7 @@ def save_model(model_dir, model, patch_size, epoch, imgs, batch_size, augmentati
     """
     Save the trained model
     """
-    filename = 'ORCA_512x512__Size-{}x{}_Epoch-{}_Images-{}_Batch-{}__{}_distortion.pth'.format(patch_size[0], patch_size[1], epoch, imgs, batch_size, augmentation_strategy)
+    filename = 'ORCA_512x512__Size-{}x{}_Epoch-{}_Images-{}_Batch-{}__{}_inpainting.pth'.format(patch_size[0], patch_size[1], epoch, imgs, batch_size, augmentation_strategy)
     logger.info("Saving the model: '{}'".format(filename))
 
     filepath = os.path.join(model_dir, filename) if model_dir is not None else filename
@@ -169,8 +169,8 @@ if __name__ == '__main__':
     dataset_dir = "../../datasets/ORCA_512x512"
     model_dir = "../../models"
     
-    augmentation_strategy = "random" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
-    augmentation = [None, "grid_distortion", "optical_distortion"]
+    augmentation_strategy = "inpainting_augmentation" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
+    augmentation = ["inpainting"]
     #[None, "horizontal_flip", "vertical_flip", "rotation", "transpose", "elastic_transformation", "grid_distortion", "optical_distortion", "color_transfer", "inpainting"]
 
     batch_size = 1
@@ -185,11 +185,11 @@ if __name__ == '__main__':
                                     color_model=color_model,
                                     augmentation=augmentation,
                                     augmentation_strategy=augmentation_strategy,
-                                    start_epoch=356,
+                                    start_epoch=2,
                                     validation_split=0.0)
 
     # loads our u-net based model to continue previous training
-    trained_model_version = "ORCA_512x512__Size-512x512_Epoch-355_Images-100_Batch-1__random_2_operations_distortion"
+    trained_model_version = "ORCA_512x512__Size-512x512_Epoch-001_Images-100_Batch-1__no_augmentation"
     trained_model_path = "{}/{}.pth".format(model_dir, trained_model_version)
     model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
 
@@ -197,7 +197,7 @@ if __name__ == '__main__':
     # model = None
 
     # train the model
-    result_file_csv = "../../datasets/ORCA_512x512/training/orca_training_accuracy_loss_distortion.csv"
+    result_file_csv = "../../datasets/ORCA_512x512/training/orca_training_accuracy_loss_inpainting.csv"
     train_model_with_validation(dataloaders=dataloaders,
                                 model=model,
                                 n_epochs=400,
