@@ -29,6 +29,7 @@ def train_model_with_validation(dataloaders,
     # Checking for GPU availability
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu") if use_cuda else "cpu"
     logger.info('Runing on: {} | GPU available? {}'.format(device, torch.cuda.is_available()))
+    filename = None
 
     torch.cuda.empty_cache()
     if model is None:
@@ -142,7 +143,7 @@ def save_model(model_dir, model, patch_size, epoch, imgs, batch_size, augmentati
     """
     Save the trained model
     """
-    filename = 'ORCA_512x512__Size-{}x{}_Epoch-{}_Images-{}_Batch-{}__{}_inpainting.pth'.format(patch_size[0], patch_size[1], epoch, imgs, batch_size, augmentation_strategy)
+    filename = 'ORCA_512x512__Size-{}x{}_Epoch-{}_Images-{}_Batch-{}__{}_all.pth'.format(patch_size[0], patch_size[1], epoch, imgs, batch_size, augmentation_strategy)
     logger.info("Saving the model: '{}'".format(filename))
 
     filepath = os.path.join(model_dir, filename) if model_dir is not None else filename
@@ -169,8 +170,8 @@ if __name__ == '__main__':
     dataset_dir = "../../datasets/ORCA_512x512"
     model_dir = "../../models"
     
-    augmentation_strategy = "inpainting_augmentation" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
-    augmentation = ["inpainting"]
+    augmentation_strategy = "standard" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
+    augmentation = [None, "horizontal_flip", "vertical_flip", "rotation", "transpose", "elastic_transformation", "grid_distortion", "optical_distortion", "color_transfer", "inpainting"]
     #[None, "horizontal_flip", "vertical_flip", "rotation", "transpose", "elastic_transformation", "grid_distortion", "optical_distortion", "color_transfer", "inpainting"]
 
     batch_size = 1
@@ -197,7 +198,7 @@ if __name__ == '__main__':
     # model = None
 
     # train the model
-    result_file_csv = "../../datasets/ORCA_512x512/training/orca_training_accuracy_loss_inpainting.csv"
+    result_file_csv = "../../datasets/ORCA_512x512/training/orca_training_accuracy_loss_all.csv"
     train_model_with_validation(dataloaders=dataloaders,
                                 model=model,
                                 n_epochs=400,
