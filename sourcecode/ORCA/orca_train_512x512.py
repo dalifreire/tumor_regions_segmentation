@@ -170,7 +170,7 @@ if __name__ == '__main__':
     dataset_dir = "../../datasets/ORCA_512x512"
     model_dir = "../../models"
     
-    augmentation_strategy = "standard" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
+    augmentation_strategy = "random" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
     augmentation = [None, "horizontal_flip", "vertical_flip", "rotation", "transpose", "elastic_transformation", "grid_distortion", "optical_distortion", "color_transfer", "inpainting"]
     #[None, "horizontal_flip", "vertical_flip", "rotation", "transpose", "elastic_transformation", "grid_distortion", "optical_distortion", "color_transfer", "inpainting"]
 
