@@ -1,0 +1,13 @@
+model,augmentation,phase,epoch,loss,accuracy,date,transformations
+ORCA__Size-640x640_Epoch-1_Images-4181_Batch-1__no_augmentation.pth,inpainting_augmentation,train,1,0.5722715740097222,0.6697947723892334,2021-12-19 23:03:13.271565,[None]
+ORCA__Size-640x640_Epoch-1_Images-4181_Batch-1__no_augmentation.pth,inpainting_augmentation,test,1,0.5714383295167107,0.682562090501912,2021-12-19 23:03:13.271623,[None]
+ORCA__Size-640x640_Epoch-2_Images-4181_Batch-1__inpainting_augmentation.pth,inpainting_augmentation,train,2,0.5212904968951855,0.7156251395589817,2022-01-16 01:38:59.882504,['inpainting']
+ORCA__Size-640x640_Epoch-2_Images-4181_Batch-1__inpainting_augmentation.pth,inpainting_augmentation,test,2,0.49083641025303626,0.7545069770498003,2022-01-16 01:38:59.882550,['inpainting']
+ORCA__Size-640x640_Epoch-3_Images-4181_Batch-1__inpainting_augmentation.pth,inpainting_augmentation,train,3,0.47297977787281903,0.7599583962419272,2022-01-16 04:03:46.895629,['inpainting']
+ORCA__Size-640x640_Epoch-3_Images-4181_Batch-1__inpainting_augmentation.pth,inpainting_augmentation,test,3,0.4399583450909492,0.7878959246113807,2022-01-16 04:03:46.895697,['inpainting']
+ORCA__Size-640x640_Epoch-4_Images-4181_Batch-1__inpainting_augmentation.pth,inpainting_augmentation,train,4,0.43278653908826553,0.7901374001948938,2022-01-16 06:28:32.224511,['inpainting']
+ORCA__Size-640x640_Epoch-4_Images-4181_Batch-1__inpainting_augmentation.pth,inpainting_augmentation,test,4,0.4214433803389552,0.8010220001159403,2022-01-16 06:28:32.224577,['inpainting']
+ORCA__Size-640x640_Epoch-5_Images-4181_Batch-1__inpainting_augmentation.pth,inpainting_augmentation,train,5,0.41140114972570585,0.8056026104185979,2022-01-16 08:53:05.760357,['inpainting']
+ORCA__Size-640x640_Epoch-5_Images-4181_Batch-1__inpainting_augmentation.pth,inpainting_augmentation,test,5,0.42333234126807007,0.8047058255298394,2022-01-16 08:53:05.760430,['inpainting']
+ORCA__Size-640x640_Epoch-6_Images-4181_Batch-1__inpainting_augmentation.pth,inpainting_augmentation,train,6,0.3963692767932722,0.8168179472380657,2022-01-16 11:17:13.646242,['inpainting']
+ORCA__Size-640x640_Epoch-6_Images-4181_Batch-1__inpainting_augmentation.pth,inpainting_augmentation,test,6,0.42592574247649356,0.8040430847998862,2022-01-16 11:17:13.646274,['inpainting']
