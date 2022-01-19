@@ -169,8 +169,8 @@ if __name__ == '__main__':
     dataset_dir = "../../datasets/ORCA"
     model_dir = "../../models"
     
-    augmentation_strategy = "inpainting_augmentation" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
-    augmentation = ["inpainting"]
+    augmentation_strategy = "color_augmentation" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
+    augmentation = ["color_transfer"]
     #[None, "horizontal_flip", "vertical_flip", "rotation", "transpose", "elastic_transformation", "grid_distortion", "optical_distortion", "color_transfer", "inpainting"]
 
     batch_size = 1
@@ -197,10 +197,10 @@ if __name__ == '__main__':
     # model = None
 
     # train the model
-    result_file_csv = "../../datasets/ORCA/training/orca_training_accuracy_loss_inpainting.csv"
+    result_file_csv = "../../datasets/ORCA/training/orca_training_accuracy_loss_color.csv"
     train_model_with_validation(dataloaders=dataloaders,
                                 model=model,
-                                n_epochs=200,
+                                n_epochs=100,
                                 augmentation_strategy=augmentation_strategy,
                                 output_dir=model_dir,
                                 augmentation_operations=augmentation,
