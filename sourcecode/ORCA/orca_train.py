@@ -169,8 +169,8 @@ if __name__ == '__main__':
     dataset_dir = "../../datasets/ORCA"
     model_dir = "../../models"
     
-    augmentation_strategy = "color_augmentation" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
-    augmentation = ["color_transfer"]
+    augmentation_strategy = "random" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
+    augmentation = ["horizontal_flip", "vertical_flip", "rotation", "transpose"]
     #[None, "horizontal_flip", "vertical_flip", "rotation", "transpose", "elastic_transformation", "grid_distortion", "optical_distortion", "color_transfer", "inpainting"]
 
     batch_size = 1
