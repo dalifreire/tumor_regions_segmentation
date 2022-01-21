@@ -158,7 +158,6 @@ import os
 import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.colors import *
-%matplotlib inline
 
 import torchvision.transforms.functional as TF
 from torchvision import utils
@@ -264,7 +263,6 @@ import csv
 import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.colors import *
-%matplotlib inline
 
 import torchvision.transforms.functional as TF
 from torchvision import utils
