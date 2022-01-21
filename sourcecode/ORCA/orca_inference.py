@@ -1,7 +1,6 @@
 import os
 import sys
 import matplotlib.pyplot as plt
-%matplotlib inline
 
 import torchvision.transforms.functional as TF
 from torchvision import utils
