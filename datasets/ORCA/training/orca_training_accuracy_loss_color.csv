@@ -13,13 +13,10 @@ ORCA__Size-640x640_Epoch-7_Images-4181_Batch-1__color_augmentation.pth,color_aug
 ORCA__Size-640x640_Epoch-7_Images-4181_Batch-1__color_augmentation.pth,color_augmentation,test,7,0.4407931309840996,0.7818903011499952,2022-01-20 20:01:43.948191,['color_transfer']
 ORCA__Size-640x640_Epoch-8_Images-4181_Batch-1__color_augmentation.pth,color_augmentation,train,8,0.434626846838207,0.7829540034624644,2022-01-20 23:32:33.225266,['color_transfer']
 ORCA__Size-640x640_Epoch-8_Images-4181_Batch-1__color_augmentation.pth,color_augmentation,test,8,0.43398918185438784,0.7879480909412657,2022-01-20 23:32:33.225318,['color_transfer']
-model,augmentation,phase,epoch,loss,accuracy,date,transformations
 ORCA__Size-640x640_Epoch-9_Images-4181_Batch-1__color_augmentation.pth,color_augmentation,train,9,0.4264518155956263,0.7878662687464488,2022-01-21 04:45:38.943433,['color_transfer']
 ORCA__Size-640x640_Epoch-9_Images-4181_Batch-1__color_augmentation.pth,color_augmentation,test,9,0.42234486593625636,0.7963094981763277,2022-01-21 04:45:38.943484,['color_transfer']
 ORCA__Size-640x640_Epoch-10_Images-4181_Batch-1__color_augmentation.pth,color_augmentation,train,10,0.41861186148471824,0.7943923391813392,2022-01-21 08:14:53.086574,['color_transfer']
 ORCA__Size-640x640_Epoch-10_Images-4181_Batch-1__color_augmentation.pth,color_augmentation,test,10,0.4117212876223595,0.8056376189266138,2022-01-21 08:14:53.086625,['color_transfer']
-model,augmentation,phase,epoch,loss,accuracy,date,transformations
-model,augmentation,phase,epoch,loss,accuracy,date,transformations
 ORCA__Size-640x640_Epoch-11_Images-4181_Batch-1__color_augmentation.pth,color_augmentation,train,11,0.40924065037127305,0.800732587126847,2022-01-21 13:38:10.518752,['color_transfer']
 ORCA__Size-640x640_Epoch-11_Images-4181_Batch-1__color_augmentation.pth,color_augmentation,test,11,0.4075697753424624,0.8086727358395124,2022-01-21 13:38:10.518805,['color_transfer']
 ORCA__Size-640x640_Epoch-12_Images-4181_Batch-1__color_augmentation.pth,color_augmentation,train,12,0.4072794085976625,0.8034736311774998,2022-01-21 17:06:49.253360,['color_transfer']
