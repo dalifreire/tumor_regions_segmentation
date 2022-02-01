@@ -1,0 +1,22 @@
+model,augmentation,phase,epoch,loss,accuracy,date,transformations
+model,augmentation,phase,epoch,loss,accuracy,date,transformations
+model,augmentation,phase,epoch,loss,accuracy,date,transformations
+model,augmentation,phase,epoch,loss,accuracy,date,transformations
+ORCA__Size-640x640_Epoch-2_Images-4181_Batch-1__random.pth,random_4_operations,train,2,0.5116403161128638,0.7226110544959704,2022-01-21 13:15:28.395356,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
+ORCA__Size-640x640_Epoch-2_Images-4181_Batch-1__random.pth,random_4_operations,test,2,0.4923434837541924,0.7611046058401075,2022-01-21 13:15:28.395410,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
+ORCA__Size-640x640_Epoch-3_Images-4181_Batch-1__random.pth,random_4_operations,train,3,0.48138240191090254,0.750666311793678,2022-01-21 16:26:06.696399,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
+ORCA__Size-640x640_Epoch-3_Images-4181_Batch-1__random.pth,random_4_operations,test,3,0.45367213118138844,0.7786235857169493,2022-01-21 16:26:06.696586,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
+ORCA__Size-640x640_Epoch-4_Images-4181_Batch-1__random.pth,random_4_operations,train,4,0.44018016284952266,0.7820840762853895,2022-01-21 19:36:47.486320,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
+ORCA__Size-640x640_Epoch-4_Images-4181_Batch-1__random.pth,random_4_operations,test,4,0.4216154811804488,0.8030431270790905,2022-01-21 19:36:47.486376,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
+ORCA__Size-640x640_Epoch-5_Images-4181_Batch-1__random.pth,random_4_operations,train,5,0.41424429325595824,0.8035251576374147,2022-01-21 22:47:11.264928,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
+ORCA__Size-640x640_Epoch-5_Images-4181_Batch-1__random.pth,random_4_operations,test,5,0.41525646508375175,0.8096713396449926,2022-01-21 22:47:11.264980,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
+ORCA__Size-640x640_Epoch-6_Images-4181_Batch-1__random.pth,random_4_operations,train,6,0.39446668876960955,0.8189965195508717,2022-01-22 01:57:44.695690,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
+ORCA__Size-640x640_Epoch-6_Images-4181_Batch-1__random.pth,random_4_operations,test,6,0.4133918759373782,0.8121018786133476,2022-01-22 01:57:44.695745,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
+ORCA__Size-640x640_Epoch-7_Images-4181_Batch-1__random.pth,random_4_operations,train,7,0.3838381853317265,0.8258331268171898,2022-01-22 05:08:06.999857,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
+ORCA__Size-640x640_Epoch-7_Images-4181_Batch-1__random.pth,random_4_operations,test,7,0.40833496802175345,0.8158391065880581,2022-01-22 05:08:06.999912,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
+ORCA__Size-640x640_Epoch-8_Images-4181_Batch-1__random.pth,random_4_operations,train,8,0.3765512860169168,0.8299916422272993,2022-01-22 08:18:33.650824,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
+ORCA__Size-640x640_Epoch-8_Images-4181_Batch-1__random.pth,random_4_operations,test,8,0.41549608652716674,0.814178343391717,2022-01-22 08:18:33.650877,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
+ORCA__Size-640x640_Epoch-9_Images-4181_Batch-1__random.pth,random_4_operations,train,9,0.3706628711516814,0.8336974475772069,2022-01-22 11:29:42.506733,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
+ORCA__Size-640x640_Epoch-9_Images-4181_Batch-1__random.pth,random_4_operations,test,9,0.41271595137401224,0.8149740140881291,2022-01-22 11:29:42.506787,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
+ORCA__Size-640x640_Epoch-10_Images-4181_Batch-1__random.pth,random_4_operations,train,10,0.3639375205118101,0.8373633530732391,2022-01-22 14:40:54.751744,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
+ORCA__Size-640x640_Epoch-10_Images-4181_Batch-1__random.pth,random_4_operations,test,10,0.4166340974380471,0.8137426120355395,2022-01-22 14:40:54.751797,[None 'horizontal_flip' 'vertical_flip' 'rotation' 'transpose']
