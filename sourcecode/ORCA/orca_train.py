@@ -142,7 +142,7 @@ def save_model(model_dir, model, patch_size, epoch, imgs, batch_size, augmentati
     """
     Save the trained model
     """
-    filename = 'ORCA__Size-{}x{}_Epoch-{}_Images-{}_Batch-{}__{}.pth'.format(patch_size[0], patch_size[1], epoch, imgs, batch_size, augmentation_strategy)
+    filename = 'ORCA__Size-{}x{}_Epoch-{}_Images-{}_Batch-{}__{}_geo.pth'.format(patch_size[0], patch_size[1], epoch, imgs, batch_size, augmentation_strategy)
     logger.info("Saving the model: '{}'".format(filename))
 
     filepath = os.path.join(model_dir, filename) if model_dir is not None else filename
@@ -169,8 +169,8 @@ if __name__ == '__main__':
     dataset_dir = "../../datasets/ORCA"
     model_dir = "../../models"
     
-    augmentation_strategy = "color_augmentation" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
-    augmentation = ["color_transfer"]
+    augmentation_strategy = "random" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
+    augmentation = [None, "horizontal_flip", "vertical_flip", "rotation", "transpose"]
     #[None, "horizontal_flip", "vertical_flip", "rotation", "transpose", "elastic_transformation", "grid_distortion", "optical_distortion", "color_transfer", "inpainting"]
 
     batch_size = 1
@@ -185,11 +185,11 @@ if __name__ == '__main__':
                                     color_model=color_model,
                                     augmentation=augmentation,
                                     augmentation_strategy=augmentation_strategy,
-                                    start_epoch=19,
+                                    start_epoch=11,
                                     validation_split=0.0)
 
     # loads our u-net based model to continue previous training
-    trained_model_version = "ORCA__Size-640x640_Epoch-18_Images-4181_Batch-1__color_augmentation"
+    trained_model_version = "ORCA__Size-640x640_Epoch-10_Images-4181_Batch-1__geo_augmentation"
     trained_model_path = "{}/{}.pth".format(model_dir, trained_model_version)
     model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
 
@@ -197,7 +197,7 @@ if __name__ == '__main__':
     # model = None
 
     # train the model
-    result_file_csv = "../../datasets/ORCA/training/orca_training_accuracy_loss_color.csv"
+    result_file_csv = "../../datasets/ORCA/training/orca_training_accuracy_loss_geo.csv"
     train_model_with_validation(dataloaders=dataloaders,
                                 model=model,
                                 n_epochs=100,
