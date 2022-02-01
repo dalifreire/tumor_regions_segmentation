@@ -48,7 +48,7 @@ def train_model_with_validation(dataloaders,
 
     since = time.time()
     qtd_images = 0
-    start_epoch = 19
+    start_epoch = 11
     for epoch in range(start_epoch, n_epochs + 1):
 
         time_elapsed = time.time() - since
