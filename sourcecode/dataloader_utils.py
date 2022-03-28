@@ -144,7 +144,7 @@ def data_augmentation(input_image, target_img, output_mask, img_input_size=(640,
             #viz_images = torch.stack([inpainting_img, inpainted_result.unsqueeze(dim=0).cuda()], dim=1)
             #viz_images = viz_images.view(-1, *list(inpainting_img.size())[1:])
             #vutils.save_image(viz_images,
-            #                    '/home/dalifreire/Downloads/teste_%03d.png' % (random.randint(0, 999)),
+            #                    '/home/dalifreire/Pictures/augmentation/teste_%03d.png' % (random.randint(0, 999)),
             #                    nrow=2 * 4,
             #                    normalize=True)
             
@@ -152,6 +152,10 @@ def data_augmentation(input_image, target_img, output_mask, img_input_size=(640,
             augmented_img[:, top:top+crop_size[1], left:left+crop_size[0]] = inpainted_result.squeeze(0)
             image = transforms.ToPILImage()(augmented_img)
             used_augmentations.append("inpainting")
+
+            #augmented_img[:, top:top+crop_size[1], left:left+crop_size[0]] = inpainting_img.squeeze(0)
+            #transforms.ToPILImage()(augmented_img).save('/home/dalifreire/Pictures/augmentation/1009010x1000902_r39c49_augmented_inpainting_{}.png'.format((random.randint(0, 999))))
+
 
     # Transform to grayscale (1 channel)
     mask = TF.to_grayscale(mask, num_output_channels=1) if mask is not None else None

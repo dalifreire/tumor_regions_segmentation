@@ -7,7 +7,11 @@
 /sourcecode/OCDC/.ipynb_checkpoints/
 /.idea/
 __pycache__
-/datasets/
+/datasets/*/results/**
+/datasets/*/testing/**
+/datasets/*/training/lesion_annotations/**
+/datasets/*/training/normal/**
+/datasets/*/training/tumor/**
 /models/
 .vscode/settings.json
 /sourcecode/GAN/checkpoints/**/results*/**
@@ -15,3 +19,5 @@ __pycache__
 /sourcecode/GAN/checkpoints/**/*.log
 /sourcecode/GAN/checkpoints/**/*.pt
 /sourcecode/GAN/checkpoints/**/*.png
+/sourcecode/GAN/examples/**
+**.amlignore*

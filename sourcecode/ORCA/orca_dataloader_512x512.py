@@ -1,3 +1,10 @@
+import os
+import sys
+
+current_path = os.path.abspath('.')
+root_path = os.path.dirname(os.path.dirname(current_path))
+sys.path.append(root_path)
+
 from sourcecode.ORCA.orca_dataloader import ORCADataset
 from sourcecode.dataloader_utils import *
 
@@ -11,12 +18,16 @@ class ORCADataset512x512(ORCADataset):
 
     def __init__(self,
                  img_dir="../../datasets/ORCA_512x512",
+                 img_input_size=(512, 512),
+                 img_output_size=(512, 512),
                  dataset_type="training",
                  augmentation=None,
                  augmentation_strategy="random",
                  color_model="LAB",
                  start_epoch=1):
         self.img_dir = img_dir
+        self.img_input_size = img_input_size
+        self.img_output_size = img_output_size
         self.dataset_type = dataset_type
         self.augmentation = augmentation
         self.augmentation_strategy = augmentation_strategy
@@ -29,6 +40,7 @@ class ORCADataset512x512(ORCADataset):
         return len(self.samples)
 
     def __getitem__(self, idx):
+
         path_img, path_mask, fname = self.samples[idx]
         image = load_pil_image(path_img, False, self.color_model)
         mask = load_pil_image(path_mask) if is_valid_file(path_mask) else None
@@ -37,8 +49,9 @@ class ORCADataset512x512(ORCADataset):
         return [x, y if mask is not None else path_mask, fname, original_size]
 
     def transform(self, image, mask, fname):
-        #should_augment = False
-        #should_augment = (self.augmentation and fname in self.used_images)
+
+        target_img = None
+        GAN_model = None
 
         if fname in self.used_images:
             self.epoch += 1
@@ -46,28 +59,64 @@ class ORCADataset512x512(ORCADataset):
         self.used_images.add(fname)
 
         augmentation_operations = []
-        if self.augmentation_strategy == "no_augmentation" \
-                or (self.augmentation_strategy == 'random' and self.epoch == 1):
+
+        if self.augmentation_strategy == "no_augmentation" or self.epoch == 1:
 
             augmentation_operations = None
+        
+        elif 'color_augmentation' in self.augmentation_strategy:
+            
+            augmentation_operations.append("color_transfer")
 
-        elif self.augmentation_strategy == 'random':
+        elif 'inpainting_augmentation' in self.augmentation_strategy:
+
+            augmentation_operations.append("inpainting")
+
+        elif 'random' in self.augmentation_strategy:
 
             augmentation_operations = self.augmentation.copy()
-            augmentation_operations.remove(None)
+            if None in augmentation_operations:
+                augmentation_operations.remove(None)
 
-        elif self.augmentation_strategy == 'one_by_epoch':
+        elif 'standard' in self.augmentation_strategy:
 
-            idx = (self.epoch-1) % len(self.augmentation)
-            augmentation_operations.append(self.augmentation[idx])
+            augmentations = self.augmentation.copy()
+            if None in augmentations:
+                augmentations.remove(None)
+
+            idx = (self.epoch-2) % len(augmentations)
+            augmentation_operations.append(augmentations[idx])
+
+
+        if self.epoch > 1 and augmentation_operations is not None and 'color_transfer' in augmentation_operations:
+
+            target_img_idx = random.randrange(len(self.samples))
+            path_img_target, path_mask_target, fname_target = self.samples[target_img_idx-1]
+            target_img = load_pil_image(path_img_target, False, self.color_model)
+
+        if self.epoch > 1 and augmentation_operations is not None and 'inpainting' in augmentation_operations:
+
+            # Prepares the GAN model            
+            sourcecode_dir = os.path.dirname(os.path.abspath('.'))
+            config_file = os.path.join(sourcecode_dir, 'GAN/configs/config_imagenet_ocdc.yaml')
+            config = get_config(config_file)
+            checkpoint_path = os.path.join(sourcecode_dir, 'GAN/checkpoints', config['dataset_name'], config['mask_type'] + '_' + config['expname'])
+
+            cuda = config['cuda'] and torch.cuda.is_available()
+            device_ids = config['gpu_ids']
+            GAN_model = Generator(config['netG'], cuda, device_ids)
+            last_model_name = get_model_list(checkpoint_path, "gen", iteration=430000)
+            
+            checkpoint = torch.load(last_model_name) if torch.cuda.is_available() else torch.load(last_model_name, map_location=lambda storage, loc: storage)
+            GAN_model.load_state_dict(checkpoint)
 
         if len(self.used_images) <= 1:
             logger.info("Epoch: '{}' augmentation {} {}".format(self.epoch, self.augmentation_strategy,
                                                                 augmentation_operations))
-
+        
         #x, y = data_augmentation(image, mask, self.img_input_size, self.img_output_size, should_augment)
         #x, y = data_augmentation(image, mask, self.img_input_size, self.img_output_size, False)
-        x, y, used_augmentations = data_augmentation(image, mask, (512, 512), (512, 512), augmentation_operations)
+        x, y, used_augmentations = data_augmentation(image, target_img, mask, self.img_input_size, self.img_output_size, augmentation_operations, GAN_model)
         return x, y, fname, image.size
 
 
@@ -99,9 +148,12 @@ def load_dataset(img_dir, dataset_type):
     return images
 
 
-def create_dataloader(batch_size=1,
+def create_dataloader(tile_size="512x512",
+                      batch_size=1,
                       shuffle=False,
-                      dataset_dir="../../datasets/ORCA",
+                      img_input_size=(512, 512),
+                      img_output_size=(512, 512),
+                      dataset_dir="../../datasets/ORCA_512x512",
                       color_model="LAB",
                       augmentation=None,
                       augmentation_strategy="random",
@@ -110,14 +162,15 @@ def create_dataloader(batch_size=1,
 
     if augmentation is None:
         augmentation = [None, "horizontal_flip", "vertical_flip", "rotation", "transpose", "elastic_transformation",
-                        "grid_distortion", "optical_distortion"]
+                        "grid_distortion", "optical_distortion", "color_transfer", "inpainting"]
 
     image_datasets = {x: ORCADataset512x512(img_dir=dataset_dir,
-                                             dataset_type='testing' if x == 'test' else 'training',
-                                             augmentation=augmentation,
-                                             augmentation_strategy='no_augmentation' if x != 'train' else augmentation_strategy,
-                                             color_model=color_model,
-                                             start_epoch=start_epoch) for x in ['train', 'valid', 'test']}
+                                            img_input_size=img_input_size, img_output_size=img_output_size,
+                                            dataset_type='testing' if x == 'test' else 'training',
+                                            augmentation=augmentation,
+                                            augmentation_strategy='no_augmentation' if x != 'train' else augmentation_strategy,
+                                            color_model=color_model,
+                                            start_epoch=start_epoch) for x in ['train', 'valid', 'test']}
 
     if validation_split > 0:
 
@@ -143,9 +196,9 @@ def create_dataloader(batch_size=1,
         del dataloaders['valid']
         del dataset_sizes['valid']
 
-    logger.info("Train images: {} augmentation: {}".format(dataset_sizes['train'], augmentation_strategy))
+    logger.info("Train images ({}): {} augmentation: {}".format(tile_size, dataset_sizes['train'], augmentation_strategy))
     if validation_split > 0:
-        logger.info("Valid images: {} augmentation: {}".format(dataset_sizes['valid'], 'no_augmentation'))
-    logger.info("Test images: {} augmentation: {}".format(dataset_sizes['test'], 'no_augmentation'))
+        logger.info("Valid images ({}): {} augmentation: {}".format(tile_size, dataset_sizes['valid'], 'no_augmentation'))
+    logger.info("Test images ({}): {} augmentation: {}".format(tile_size, dataset_sizes['test'], 'no_augmentation'))
 
     return dataloaders
