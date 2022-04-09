@@ -77,8 +77,12 @@ The proposed method and the experimental evaluation were implemented using the [
 
 To provide better understanding and make this work as reproducible as possible, the source code is publicly available at [source code folder](sourcecode).
 
-
-
+This implementation requires Python 3.8 or higher and the following dependencies:
+. [PyTorch](https://pytorch.org/)
+. [openslide-python](https://github.com/openslide/openslide-python)
+. [albumentations](https://github.com/albumentations-team/albumentations)
+. [HistomicsTK](https://github.com/DigitalSlideArchive/HistomicsTK)
+. [jupyter notebooks](https://jupyter.org/install)
 
 
 # How to cite

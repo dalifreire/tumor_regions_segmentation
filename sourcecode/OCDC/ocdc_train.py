@@ -19,6 +19,7 @@ def train_model_with_validation(dataloaders,
                                 model=None,
                                 patch_size=(640, 640),
                                 n_epochs=1,
+                                start_epoch=1,
                                 batch_size=1,
                                 use_cuda=True,
                                 output_dir="../../models",
@@ -48,7 +49,6 @@ def train_model_with_validation(dataloaders,
 
     since = time.time()
     qtd_images = 0
-    start_epoch = 2
     for epoch in range(start_epoch, n_epochs + 1):
 
         time_elapsed = time.time() - since
@@ -166,11 +166,9 @@ def save_model(model_dir, model, patch_size, epoch, imgs, batch_size, augmentati
 
 if __name__ == '__main__':
 
-    # dataset_dir = "../../datasets/OCDC"
-    dataset_dir = "/media/dalifreire/CCB60537B6052394/Users/Dali/Downloads/OCDC"
-    # model_dir = "../../models"
-    model_dir = "/media/dalifreire/CCB60537B6052394/Users/Dali/Downloads/models"
-
+    dataset_dir = "../../datasets/OCDC"
+    model_dir = "../../models"
+    
     augmentation_strategy = "random" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
     augmentation = [None,
                     "horizontal_flip", 
@@ -184,6 +182,7 @@ if __name__ == '__main__':
                     "inpainting"]
     #[None, "horizontal_flip", "vertical_flip", "rotation", "transpose", "elastic_transformation", "grid_distortion", "optical_distortion", "color_transfer", "inpainting"]
 
+    start_epoch = 1
     batch_size = 1
     patch_size = (640, 640)
     color_model = "LAB"
@@ -196,11 +195,11 @@ if __name__ == '__main__':
                                     color_model=color_model,
                                     augmentation=augmentation,
                                     augmentation_strategy=augmentation_strategy,
-                                    start_epoch=2,
+                                    start_epoch=start_epoch,
                                     validation_split=0.0)
 
     # loads our u-net based model to continue previous training
-    #trained_model_version = "OCDC__Size-640x640_Epoch-1_Images-840_Batch-1__no_augmentation"
+    #trained_model_version = "OCDC__Size-640x640_Epoch-001_Images-840_Batch-1__no_augmentation"
     #trained_model_path = "{}/{}.pth".format(model_dir, trained_model_version)
     #model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
 
@@ -208,10 +207,11 @@ if __name__ == '__main__':
     model = None
 
     # train the model
-    result_file_csv = "../../datasets/OCDC/training/ocdc_training_accuracy_loss_all.csv"
+    result_file_csv = "../../datasets/OCDC/training/ocdc_training_accuracy_loss.csv"
     train_model_with_validation(dataloaders=dataloaders,
                                 model=model,
                                 n_epochs=400,
+                                start_epoch=start_epoch,
                                 augmentation_strategy=augmentation_strategy,
                                 output_dir=model_dir,
                                 augmentation_operations=augmentation,

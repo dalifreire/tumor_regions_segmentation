@@ -19,6 +19,7 @@ def train_model_with_validation(dataloaders,
                                 model=None,
                                 patch_size=(640, 640),
                                 n_epochs=1,
+                                start_epoch=start_epoch,
                                 batch_size=1,
                                 use_cuda=True,
                                 output_dir="../../models",
@@ -48,7 +49,6 @@ def train_model_with_validation(dataloaders,
 
     since = time.time()
     qtd_images = 0
-    start_epoch = 11
     for epoch in range(start_epoch, n_epochs + 1):
 
         time_elapsed = time.time() - since
@@ -170,9 +170,19 @@ if __name__ == '__main__':
     model_dir = "../../models"
     
     augmentation_strategy = "random" # "no_augmentation", "color_augmentation", "inpainting_augmentation", "standard", "random"
-    augmentation = [None, "grid_distortion", "optical_distortion"]
+    augmentation = [None,
+                    "horizontal_flip", 
+                    "vertical_flip", 
+                    "rotation", 
+                    "transpose", 
+                    "elastic_transformation", 
+                    "grid_distortion", 
+                    "optical_distortion", 
+                    "color_transfer", 
+                    "inpainting"]
     #[None, "horizontal_flip", "vertical_flip", "rotation", "transpose", "elastic_transformation", "grid_distortion", "optical_distortion", "color_transfer", "inpainting"]
 
+    start_epoch = 1
     batch_size = 1
     patch_size = (640, 640)
     color_model = "LAB"
@@ -185,22 +195,23 @@ if __name__ == '__main__':
                                     color_model=color_model,
                                     augmentation=augmentation,
                                     augmentation_strategy=augmentation_strategy,
-                                    start_epoch=11,
+                                    start_epoch=start_epoch,
                                     validation_split=0.0)
 
     # loads our u-net based model to continue previous training
-    trained_model_version = "ORCA__Size-640x640_Epoch-10_Images-4181_Batch-1__random_distortion"
-    trained_model_path = "{}/{}.pth".format(model_dir, trained_model_version)
-    model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
+    #trained_model_version = "ORCA__Size-640x640_Epoch-10_Images-4181_Batch-1__random_distortion"
+    #trained_model_path = "{}/{}.pth".format(model_dir, trained_model_version)
+    #model = load_checkpoint(file_path=trained_model_path, img_input_size=patch_size, use_cuda=True)
 
     # starts the training from scratch
-    # model = None
+    model = None
 
     # train the model
-    result_file_csv = "../../datasets/ORCA/training/orca_training_accuracy_loss_distortion.csv"
+    result_file_csv = "../../datasets/ORCA/training/orca_training_accuracy_loss.csv"
     train_model_with_validation(dataloaders=dataloaders,
                                 model=model,
                                 n_epochs=100,
+                                start_epoch=start_epoch,
                                 augmentation_strategy=augmentation_strategy,
                                 output_dir=model_dir,
                                 augmentation_operations=augmentation,
