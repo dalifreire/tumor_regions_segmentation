@@ -70,7 +70,7 @@ The [ORal Cancer Annotated dataset (ORCA)](https://sites.google.com/unibas.it/or
 
 Details about the ORCA dataset are available at [datasets/ORCA folder](datasets/ORCA).
 
-![](images/orca-results.svg)
+![](images/orca-results.png)
 
 # Source code
 
