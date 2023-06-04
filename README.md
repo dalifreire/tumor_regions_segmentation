@@ -88,8 +88,16 @@ This implementation requires Python 3.8 or higher and the following dependencies
 
 # How to cite
 
+## Segmentation Method:
 [1](https://doi.org/10.1016/j.bspc.2021.102921) Dalí F. D. dos Santos, Paulo R. de Faria, Bruno A. N. Travençolo, Marcelo Z. do Nascimento, Automated detection of tumor regions from oral histological whole slide images using fully convolutional neural networks, Biomedical Signal Processing and Control, Volume 69, 2021, 102921, ISSN 1746-8094, https://doi.org/10.1016/j.bspc.2021.102921.
 
+## Augmentation Method:
+[1](https://link.springer.com/article/10.1007/s10278-023-00814-z) Dalí F. D. dos Santos, Paulo R. de Faria, Bruno A. N. Travençolo, Marcelo Z. do Nascimento, Influence of Data Augmentation Strategies on the Segmentation of Oral Histological Images Using Fully Convolutional Neural Networks. J Digit Imaging (2023), https://doi.org/10.1007/s10278-023-00814-z
+
+## OCDC Dataset:
+[1](https://arxiv.org/abs/2303.10172) Dalí F. D. dos Santos, Paulo R. de Faria, Adriano M. Loyola, Sérgio V. Cardoso, Bruno A. N. Travençolo, Marcelo Z. do Nascimento, Hematoxylin and eosin stained oral squamous cell carcinoma histological images dataset, https://arxiv.org/abs/2303.10172
+
+[2](https://data.mendeley.com/datasets/9bsc36jyrt/1) Dalí F. D. dos Santos, Paulo R. de Faria, Adriano M. Loyola, Sérgio V. Cardoso, Bruno A. N. Travençolo, Marcelo Z. do Nascimento, H&E-stained oral squamous cell carcinoma histological images dataset, https://data.mendeley.com/datasets/9bsc36jyrt/1
 
 
 # Contact
